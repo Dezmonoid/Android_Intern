@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Android_Intern</string>
+    <string name="buttonName">OK</string>
 </resources>
