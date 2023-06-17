@@ -10,12 +10,11 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#FFED00"
+        android:gravity="center"
         android:text="@string/app_name"
-        android:textColor="#ff0000"
-        android:textSize="32sp"
-        android:background="#fef580"
-        android:gravity="center"/>
-
+        android:textColor="#F80000"
+        android:textSize="32sp" />
 
 
 </LinearLayout>
