@@ -13,7 +13,13 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
         val buttonOk: Button = findViewById(R.id.button_ok)
-        buttonOk.setOnClickListener { Toast.makeText(applicationContext,"Нажата ОК",Toast.LENGTH_SHORT).show()}
+        buttonOk.setOnClickListener {
+            Toast.makeText(
+                applicationContext,
+                "Нажата ОК",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
 
