@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         val buttonOk: Button = findViewById(R.id.button_ok)
         buttonOk.setOnClickListener {
             Toast.makeText(
-                applicationContext,
+                this,
                 "Нажата ОК",
                 Toast.LENGTH_SHORT
             ).show()
