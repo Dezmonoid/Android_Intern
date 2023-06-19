@@ -2,4 +2,5 @@
     <string name="app_name">Android_Intern</string>
     <string name="button_text">Кнопка</string>
     <string name="text_view">пустота</string>
+    <string name="use_button">Нажата кнопка</string>
 </resources>
