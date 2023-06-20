@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Android_Intern</string>
-    <string name="text1">Text1</string>
-    <string name="text2">Text2</string>
+    <string name="view_text">Задание 9</string>
+    <string name="button_text">ОК</string>
 </resources>
