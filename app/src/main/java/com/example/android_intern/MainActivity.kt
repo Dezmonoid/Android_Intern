@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         buttonOk.setOnClickListener {
             Toast.makeText(
                 this,
-                "Нажата ОК",
+                resources.getString(R.string.text_ok),
                 Toast.LENGTH_SHORT
             ).show()
         }
