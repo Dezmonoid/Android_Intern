@@ -31,21 +31,5 @@ class MainActivity : AppCompatActivity() {
 
 }
 
-class RecyclerAdapter(private val colorData: List<String>) :
-    RecyclerView.Adapter<RecyclerAdapter.RecyclerHolder>() {
-    class RecyclerHolder(textView: View) : RecyclerView.ViewHolder(textView) {
-        var recyclerText: TextView = textView.findViewById(R.id.text_view)
-    }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerHolder {
-        val textView =
-            LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_item, parent, false)
-        return RecyclerHolder(textView)
-    }
 
-    override fun getItemCount(): Int = colorData.size
-
-    override fun onBindViewHolder(holder: RecyclerHolder, position: Int) {
-        holder.recyclerText.text = colorData[position]
-    }
-}
