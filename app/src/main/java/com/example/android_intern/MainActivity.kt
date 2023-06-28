@@ -9,8 +9,9 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 
+private const val UnitProgress = 10
+
 class MainActivity : AppCompatActivity() {
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         buttonOk.setOnClickListener {
             if (checkBox.isChecked) {
                 textView.text = userText.text
-                loading.progress += 10
+                loading.progress += UnitProgress
             }
         }
     }
