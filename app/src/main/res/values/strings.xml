@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Android_Intern</string>
+    <string name="button_text">Фильтровать</string>
+    <string name="ET_text">Введите текст фильтра</string>
 </resources>
