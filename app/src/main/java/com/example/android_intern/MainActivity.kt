@@ -1,13 +1,11 @@
 package com.example.android_intern
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.ContextMenu
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
 import okhttp3.*
 import java.io.IOException
@@ -47,5 +45,18 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (data?.getStringExtra("result") == "Like") {
+            val snackbar1 =
+                Snackbar.make(
+                    findViewById(R.id.main_layout),
+                    "Картинка поместилась в избранное!",
+                    Snackbar.LENGTH_SHORT
+                )
+            snackbar1.show()
+        }
     }
 }

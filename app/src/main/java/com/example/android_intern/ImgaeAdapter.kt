@@ -1,5 +1,6 @@
 package com.example.android_intern
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -30,7 +31,7 @@ class ImageAdapter(
         holder.imageView.setOnClickListener {
             val intent = Intent(context, FullImageActivity::class.java)
             intent.putExtra("URL", images[position])
-            context.startActivity(intent)
+            (context as Activity).startActivityForResult(intent, 1)
         }
     }
 }
