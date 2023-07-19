@@ -12,7 +12,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button_ok"
+            android:id="@+id/button_filter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/button_text" />
@@ -29,9 +29,9 @@
         android:layout_height="wrap_content">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RV1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/RV1"/>
+            android:layout_height="match_parent" />
     </LinearLayout>
 
 

@@ -7,7 +7,6 @@ import android.widget.EditText
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
-import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
@@ -111,18 +110,19 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val recyclerView: RecyclerView = findViewById(R.id.RV1)
-        val filterButton: Button = findViewById(R.id.button_ok)
+        val recyclerPhoneView: RecyclerView = findViewById(R.id.RV1)
+        val filterButton: Button = findViewById(R.id.button_filter)
         val filterText: EditText = findViewById(R.id.ET1)
         val gson = Gson()
         val phoneBook =
             gson.fromJson(json, Array<PhoneBook>::class.java).asList()
-        recyclerView.hasFixedSize()
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = PhoneAdapter(phoneBook, this)
+        recyclerPhoneView.hasFixedSize()
+        recyclerPhoneView.layoutManager = LinearLayoutManager(this)
+        recyclerPhoneView.adapter = PhoneAdapter(phoneBook, this)
         filterButton.setOnClickListener {
-            val filterPhoneBook = phoneBook.filter { "${it.name} ${it.phone} ${it.type}".contains(filterText.text)}
-            recyclerView.adapter = PhoneAdapter(filterPhoneBook, this)
+            val filterPhoneBook =
+                phoneBook.filter { "${it.name} ${it.phone} ${it.type}".contains(filterText.text) }
+            recyclerPhoneView.adapter = PhoneAdapter(filterPhoneBook, this)
         }
     }
 }
