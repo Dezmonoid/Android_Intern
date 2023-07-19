@@ -17,9 +17,10 @@ class FullImageActivity : AppCompatActivity() {
             .load(intent.getStringExtra("URL"))
             .into(findViewById(R.id.IV2))
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
-        menuInflater.inflate(R.menu.full_image_menu,menu)
+        menuInflater.inflate(R.menu.full_image_menu, menu)
         return true
     }
 
