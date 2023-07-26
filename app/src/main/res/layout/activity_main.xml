@@ -6,27 +6,26 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/TB"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/button_filter"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/button_text" />
+        android:layout_margin="3dp"
+        android:background="#7089BA">
 
         <EditText
             android:id="@+id/ET1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/ET_text" />
-    </LinearLayout>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:hint="@string/ET_text" />
+
+    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/RV1"

@@ -1,18 +1,17 @@
 package com.example.android_intern
 
-import androidx.appcompat.app.AppCompatActivity
+
+import android.content.Context
 import android.os.Bundle
-import android.widget.Button
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 
-class MainActivity : AppCompatActivity() {
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        val json = """[{
+const val PhoneBookJson = """[{
     "name": "(Приёмная)",
     "phone": "+375 (2239) 7-17-80",
     "type": ""
@@ -108,21 +107,41 @@ class MainActivity : AppCompatActivity() {
     "type": "Факс"
   }]"""
 
+class MainActivity : AppCompatActivity() {
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val recyclerPhoneView: RecyclerView = findViewById(R.id.RV1)
-        val filterButton: Button = findViewById(R.id.button_filter)
         val filterText: EditText = findViewById(R.id.ET1)
         val gson = Gson()
         val phoneBook =
-            gson.fromJson(json, Array<PhoneBook>::class.java).asList()
+            gson.fromJson(PhoneBookJson, Array<PhoneBook>::class.java).asList()
         recyclerPhoneView.hasFixedSize()
         recyclerPhoneView.layoutManager = LinearLayoutManager(this)
         recyclerPhoneView.adapter = PhoneAdapter(phoneBook, this)
-        filterButton.setOnClickListener {
-            val filterPhoneBook =
-                phoneBook.filter { "${it.name} ${it.phone} ${it.type}".contains(filterText.text) }
-            recyclerPhoneView.adapter = PhoneAdapter(filterPhoneBook, this)
-        }
+
+        filterText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
+                recyclerPhoneView.adapter = PhoneAdapter(
+                    phoneBook.filter { "${it.name} ${it.phone} ${it.type}".contains(filterText.text) },
+                    this@MainActivity)
+            }
+        })
+
+
     }
 }
