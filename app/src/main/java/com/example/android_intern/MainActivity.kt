@@ -1,12 +1,14 @@
 package com.example.android_intern
 
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
@@ -120,25 +122,29 @@ class MainActivity : AppCompatActivity() {
         val gson = Gson()
         val phoneBook =
             gson.fromJson(PhoneBookJson, Array<PhoneBook>::class.java).asList()
-        recyclerPhoneView.hasFixedSize()
-        recyclerPhoneView.layoutManager = LinearLayoutManager(this)
-        recyclerPhoneView.adapter = PhoneAdapter(phoneBook, this)
+        val phoneAdapter = PhoneAdapter(phoneBook,this)
+        recyclerPhoneView.apply {
+            hasFixedSize()
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            addItemDecoration(DividerItemDecoration(this@MainActivity, DividerItemDecoration.VERTICAL))
+            itemAnimator = DefaultItemAnimator()
+            adapter = phoneAdapter
+                    }
 
         filterText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {}
+            override fun afterTextChanged(s: Editable) {
+                phoneAdapter.submitList(phoneBook.filter{ "${it.name} ${it.phone} ${it.type}".contains(filterText.text) })
+            }
             override fun beforeTextChanged(
                 s: CharSequence, start: Int,
                 count: Int, after: Int
             ) {
             }
-
             override fun onTextChanged(
                 s: CharSequence, start: Int,
                 before: Int, count: Int
             ) {
-                recyclerPhoneView.adapter = PhoneAdapter(
-                    phoneBook.filter { "${it.name} ${it.phone} ${it.type}".contains(filterText.text) },
-                    this@MainActivity)
+
             }
         })
 
