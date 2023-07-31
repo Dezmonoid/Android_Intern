@@ -7,6 +7,8 @@ android {
     namespace 'com.example.android_intern'
     compileSdk 33
 
+    viewBinding.enabled = true
+
     defaultConfig {
         applicationId "com.example.android_intern"
         minSdk 28

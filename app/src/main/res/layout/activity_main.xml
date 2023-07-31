@@ -7,18 +7,18 @@
     tools:context=".MainActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/TB"
+        android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="3dp"
         android:background="#7089BA">
 
         <EditText
-            android:id="@+id/ET1"
+            android:id="@+id/etInputFilter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
-            android:hint="@string/ET_text" />
+            android:hint="@string/et_text" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -28,7 +28,7 @@
         android:layout_margin="3dp">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/RV1"
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
