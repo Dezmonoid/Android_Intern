@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="3dp"
-        android:background="#7089BA">
+        android:background="@color/green">
 
         <EditText
             android:id="@+id/etInputFilter"

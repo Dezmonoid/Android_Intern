@@ -22,8 +22,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initRecyclerView()
-        phoneAdapter.submitList(getInitNumbers())
+        firstFilling()
         setListeners()
+    }
+
+    private fun firstFilling() {
+        phoneAdapter.submitList(getInitNumbers())
     }
 
     private fun setListeners() {

@@ -3,4 +3,6 @@
     <string name="button_text">Фильтровать</string>
     <string name="et_text">Введите текст фильтра</string>
     <string name="phone">Phone: %1$s</string>
+    <string name="name">Name: %1$s</string>
+    <string name="type">Type: %1$s</string>
 </resources>

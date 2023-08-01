@@ -34,11 +34,17 @@ class PhoneViewHolder(private val binding: PhoneItemBinding) :
 
 
     fun bind(phoneBook: PhoneBook) {
-        binding.TV1.text = "Name: ${phoneBook.name}"
-        binding.TV2.text = binding.root.context.getString(
+        binding.tvName.text = binding.root.context.getString(
+            R.string.name,
+            phoneBook.name
+        )
+        binding.tvPhone.text = binding.root.context.getString(
             R.string.phone,
             phoneBook.phone
-        )   //"Phone: ${phoneBook.phone}"
-        binding.TV3.text = "Тype: ${phoneBook.type}"
+        )
+        binding.tvType.text = binding.root.context.getString(
+            R.string.type,
+            phoneBook.type
+        )
     }
 }
