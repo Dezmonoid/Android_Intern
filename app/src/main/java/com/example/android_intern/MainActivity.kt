@@ -11,6 +11,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.button.setOnClickListener { binding.tv.text = "Добрейший вечерочек" }
+        binding.button.setOnClickListener {
+            binding.tv.text = binding.root.context.getString(R.string.text_message)
+        }
     }
 }
