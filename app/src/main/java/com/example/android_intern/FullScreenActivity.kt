@@ -11,8 +11,8 @@ private const val ImageURL = "https://bigpicture.ru/wp-content/uploads/2012/04/2
 
 class FullScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding = ActivityFullScreenBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
+        binding = ActivityFullScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Glide
             .with(this)

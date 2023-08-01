@@ -2,20 +2,26 @@ package com.example.android_intern
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.example.android_intern.databinding.ActivityFullScreenBinding
+import com.example.android_intern.databinding.ActivityMainBinding
 
+private lateinit var binding: ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        openFullScreenActivity()
     }
 
-    fun nextActivity(view: View) {
+    fun openFullScreenActivity() {
         val intent = Intent(this, FullScreenActivity::class.java)
+        binding.buttonFullscreen.setOnClickListener {
+            startActivity(intent)
+        }
 
-        startActivity(intent)
     }
 }
