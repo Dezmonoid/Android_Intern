@@ -8,27 +8,28 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ColorsAdapter(
     private val colors: List<String>,
-    val callback: (String) -> Unit
+    private val callback: (String) -> Unit
 ) :
-    RecyclerView.Adapter<ColorsHolder>() {
-
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ColorsHolder {
+    RecyclerView.Adapter<ColorsViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ColorsViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.item_colors_view, parent, false)
-        return ColorsHolder(view)
+        return ColorsViewHolder(view)
     }
 
     override fun getItemCount(): Int = colors.size
 
-    override fun onBindViewHolder(holder: ColorsHolder, position: Int) {
-        holder.recyclerText.text = colors[position]
-        holder.recyclerText.setOnClickListener { callback(colors[position]) }
+    override fun onBindViewHolder(holder: ColorsViewHolder, position: Int) {
+        holder.bind(colors, callback)
     }
 }
 
-class ColorsHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val recyclerText: TextView = view.findViewById(R.id.text_view)
+class ColorsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    private val recyclerText: TextView = view.findViewById(R.id.text_view)
+    fun bind(colors: List<String>, callback: (String) -> Unit) {
+        recyclerText.text = colors[position]
+        recyclerText.setOnClickListener { callback(colors[position]) }
+    }
 }
 
 
