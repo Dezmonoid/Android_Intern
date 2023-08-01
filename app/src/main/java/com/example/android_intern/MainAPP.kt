@@ -7,6 +7,5 @@ class MainAPP:Application() {
     override fun onCreate() {
         Timber.plant(Timber.DebugTree())
         super.onCreate()
-
     }
 }
