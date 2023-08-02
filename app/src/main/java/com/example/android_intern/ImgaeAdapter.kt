@@ -13,28 +13,28 @@ class ImageAdapter(
     private val images: List<String>,
     private val context: Context
 ) :
-    RecyclerView.Adapter<ImageHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageHolder {
+    RecyclerView.Adapter<ImageViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.image_adapter, parent, false)
-        return ImageHolder(view)
+        return ImageViewHolder(view)
     }
 
     override fun getItemCount(): Int = images.size
 
-    override fun onBindViewHolder(holder: ImageHolder, position: Int) {
+    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
+        val intent = Intent(context, FullImageActivity::class.java)
         Glide
             .with(context)
             .load(images[position])
             .into(holder.imageView)
         holder.imageView.setOnClickListener {
-            val intent = Intent(context, FullImageActivity::class.java)
             intent.putExtra("URL", images[position])
             context.startActivity(intent)
         }
     }
 }
 
-class ImageHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val imageView: ImageView = view.findViewById(R.id.IV1)
+class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val imageView: ImageView = view.findViewById(R.id.image_icon)
 }
