@@ -18,10 +18,10 @@
             android:text="@string/button_text" />
 
         <EditText
-            android:id="@+id/ET1"
+            android:id="@+id/text_filter"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/ET_text" />
+            android:text="@string/et_text" />
     </LinearLayout>
 
     <LinearLayout
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/RV1"
+            android:id="@+id/recycler_view_phone"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>

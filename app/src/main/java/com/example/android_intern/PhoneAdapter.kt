@@ -1,37 +1,41 @@
 package com.example.android_intern
 
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import java.util.zip.Inflater
+import com.example.android_intern.databinding.PhoneItemBinding
 
-class PhoneAdapter(private val phoneBook: List<PhoneBook>, val context: Context) :
-    RecyclerView.Adapter<PhoneAdapter.ViewHolder>() {
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val nameTV = view.findViewById<TextView>(R.id.TV1)
-        val phoneTV = view.findViewById<TextView>(R.id.TV2)
-        val typeTV = view.findViewById<TextView>(R.id.TV3)
+class PhoneAdapter(private val phoneBook: List<PhoneBook>) :
+    RecyclerView.Adapter<PhoneViewHolder>() {
 
-        fun bind(phoneBook: PhoneBook, context: Context) {
-            nameTV.text = "Name: ${phoneBook.name}"
-            phoneTV.text = "Phone: ${phoneBook.phone}"
-            typeTV.text = "Тype: ${phoneBook.type}"
-        }
-
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.phone_item, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhoneViewHolder {
+        val binding = PhoneItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return PhoneViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
         return phoneBook.size
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(phoneBook[position], context)
+    override fun onBindViewHolder(holder: PhoneViewHolder, position: Int) {
+        holder.bind(phoneBook[position])
+    }
+}
+
+class PhoneViewHolder(private val binding: PhoneItemBinding) :
+    RecyclerView.ViewHolder(binding.root) {
+    fun bind(phoneBook: PhoneBook) {
+        binding.tvName.text = binding.root.context.getString(
+            R.string.name,
+            phoneBook.name
+        )
+        binding.tvPhone.text = binding.root.context.getString(
+            R.string.phone,
+            phoneBook.phone
+        )
+        binding.tvType.text = binding.root.context.getString(
+            R.string.type,
+            phoneBook.type
+        )
     }
 }

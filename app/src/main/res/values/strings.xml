@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Android_Intern</string>
     <string name="button_text">Фильтровать</string>
-    <string name="ET_text"> </string>
+    <string name="et_text"> </string>
+    <string name="phone">Phone: %1$s</string>
+    <string name="name">Name: %1$s</string>
+    <string name="type">Type: %1$s</string>
 </resources>
