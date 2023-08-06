@@ -1,7 +1,10 @@
 package com.example.android_intern
 
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +20,11 @@ class PhoneAdapter :
 
     override fun onBindViewHolder(holder: PhoneViewHolder, position: Int) {
         holder.bind(getItem(position))
+        holder.itemView.setOnClickListener {
+            val intent =
+                Intent(Intent.ACTION_CALL, Uri.parse("tel:" + getItem(position).phone))
+            startActivity(holder.binding.root.context, intent, null)
+        }
     }
 }
 
@@ -26,13 +34,10 @@ private class UserItemDiffCallback : DiffUtil.ItemCallback<PhoneBook>() {
 
     override fun areContentsTheSame(oldItem: PhoneBook, newItem: PhoneBook): Boolean =
         oldItem == newItem
-
 }
 
-class PhoneViewHolder(private val binding: PhoneItemBinding) :
+class PhoneViewHolder(val binding: PhoneItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
-
-
     fun bind(phoneBook: PhoneBook) {
         binding.tvName.text = binding.root.context.getString(
             R.string.name,
