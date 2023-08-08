@@ -3,8 +3,12 @@ package com.example.android_intern
 
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface WeatherApi {
-    @GET("weather?id=622034&appid=eeba719e0ea1ed0d70d6ea433307695e")
-    fun getWeather(): Call<Weathers>
+    @GET("forecast?")
+    fun getCurrentForecastData(
+        @Query("id") city_id: String,
+        @Query("APPID") app_id: String
+    ): Call<ForecastResponse>
 }

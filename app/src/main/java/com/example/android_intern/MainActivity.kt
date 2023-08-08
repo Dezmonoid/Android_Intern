@@ -2,48 +2,62 @@ package com.example.android_intern
 
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_intern.databinding.ActivityMainBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.await
 import retrofit2.converter.gson.GsonConverterFactory
 
+const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
+const val APP_ID = "eeba719e0ea1ed0d70d6ea433307695e"
+const val CITY_ID = "622034"
 
 class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
+    private val adapter = WeatherAdapter()
+    private val retrofit = initRetrofit()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val adapter = WeatherAdapter()
-        binding.RV1.layoutManager = LinearLayoutManager(this)
-        binding.RV1.adapter = adapter
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.level = HttpLoggingInterceptor.Level.BODY
-        val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+        initRecyclerView()
+        fillRecyclerView()
+    }
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.openweathermap.org/data/2.5/").client(client)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val weatherApi = retrofit.create(WeatherApi::class.java)
-        CoroutineScope(Dispatchers.IO).launch {
-            val weatherList = weatherApi.getWeather().await()
-            Log.i("test", weatherList.weather.toString())
-
-            runOnUiThread() {
-                binding.apply {
-                    adapter.submitList(weatherList.weather)
+    private fun fillRecyclerView() {
+        retrofit.getCurrentForecastData(CITY_ID, APP_ID)
+            .enqueue(object : Callback<ForecastResponse> {
+                override fun onResponse(
+                    call: Call<ForecastResponse>,
+                    response: Response<ForecastResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val forecastGetList = response.body()!!
+                        runOnUiThread {
+                            adapter.submitList(forecastGetList.list)
+                        }
+                    }
                 }
 
-            }
-        }
+                override fun onFailure(call: Call<ForecastResponse>, t: Throwable) {
+                    t.printStackTrace()
+                }
+            })
+    }
+
+    private fun initRetrofit(): WeatherApi {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build().create(WeatherApi::class.java)
+    }
+
+
+    private fun initRecyclerView() {
+        binding.weatherRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.weatherRecyclerView.adapter = adapter
     }
 }
