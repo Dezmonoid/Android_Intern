@@ -15,10 +15,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initRecyclerView()
-        initButtonListener()
+        fillRecyclerViewFilter()
     }
 
-    private fun initButtonListener() {
+    private fun fillRecyclerViewFilter() {
         binding.buttonFilter.setOnClickListener {
             val filterPhoneBook =
                 phoneBook.filter { "${it.name} ${it.phone} ${it.type}".contains(binding.textFilter.text) }
