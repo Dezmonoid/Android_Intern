@@ -20,15 +20,15 @@ class ColorsAdapter(
     override fun getItemCount(): Int = colors.size
 
     override fun onBindViewHolder(holder: ColorsViewHolder, position: Int) {
-        holder.bind(colors, callback)
+        holder.bind(colors[position], callback)
     }
 }
 
 class ColorsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val recyclerText: TextView = view.findViewById(R.id.text_view)
-    fun bind(colors: List<String>, callback: (String) -> Unit) {
-        recyclerText.text = colors[position]
-        recyclerText.setOnClickListener { callback(colors[position]) }
+    fun bind(colors: String, callback: (String) -> Unit) {
+        recyclerText.text = colors
+        recyclerText.setOnClickListener { callback(colors) }
     }
 }
 

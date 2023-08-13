@@ -18,7 +18,9 @@ class MainActivity : AppCompatActivity() {
     private fun initRecyclerView() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter =
-            ColorsAdapter(colorsList) { Toast.makeText(this, it, Toast.LENGTH_SHORT).show() }
+            ColorsAdapter(colorsList) {
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            }
     }
 }
 
