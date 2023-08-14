@@ -12,49 +12,63 @@ import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 
-
 private const val URL =
     "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=ff49fcd4d4a08aa6aafb6ea3de826464&tags=cat&format=json&nojsoncallback=1"
-private const val EXTRA = "URL"
+private const val NUMBER_OF_COUNT = 2
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val client = OkHttpClient()
-    private val receivedImageList = mutableListOf<String>()
-    private val request = Request.Builder()
-        .url(URL)
-        .build()
+    private var jsonImageList = mutableListOf<String>()
+    private lateinit var request: Request
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(R.layout.activity_main)
+        editBinding()
         setContentView(binding.root)
-        initRecyclerView()
-        fillRecyclerView()
+        buildAndCallUrl()
     }
 
-    private fun fillRecyclerView() {
+    private fun buildAndCallUrl() {
+        request = Request.Builder()
+            .url(URL)
+            .build()
+
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 e.printStackTrace()
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val photo =
-                    GsonBuilder().create()
-                        .fromJson(response.body!!.string(), Photo::class.java)
-                photo.photos.photo.forEach { photo ->
-                    receivedImageList.add("https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_z.jpg")
-                }
-                runOnUiThread()
-                {
-                    binding.recyclerView.adapter = ImageAdapter(receivedImageList, this@MainActivity)
-                }
+                fillingRecyclerView(response)
             }
         })
     }
 
-    private fun initRecyclerView() {
-        binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
+    private fun fillingRecyclerView(response: Response) {
+        val photo =
+            GsonBuilder().create()
+                .fromJson(response.body!!.string(), Photo::class.java)
+        photo.photos.photo.forEach { photos ->
+            jsonImageList.add(
+                binding.root.context.getString(
+                    R.string.icon_url,
+                    photos.farm.toString(),
+                    photos.server,
+                    photos.id,
+                    photos.secret
+                )
+            )
+        }
+        runOnUiThread()
+        {
+            binding.recyclerView.adapter = ImageAdapter(jsonImageList)
+        }
+    }
+
+    private fun editBinding() {
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding.recyclerView.layoutManager = GridLayoutManager(this, NUMBER_OF_COUNT)
     }
 }
