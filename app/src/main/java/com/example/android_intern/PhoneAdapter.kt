@@ -1,10 +1,7 @@
 package com.example.android_intern
 
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +10,7 @@ import com.example.android_intern.databinding.PhoneItemBinding
 
 class PhoneAdapter :
     ListAdapter<PhoneBook, PhoneViewHolder>(UserItemDiffCallback()) {
+    private var onClickListener: OnClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhoneViewHolder {
         val binding = PhoneItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PhoneViewHolder(binding)
@@ -21,11 +19,20 @@ class PhoneAdapter :
     override fun onBindViewHolder(holder: PhoneViewHolder, position: Int) {
         holder.bind(getItem(position))
         holder.itemView.setOnClickListener {
-            val intent =
-                Intent(Intent.ACTION_CALL, Uri.parse("tel:" + getItem(position).phone))
-            startActivity(holder.binding.root.context, intent, null)
+            if (onClickListener != null) {
+                onClickListener!!.onClick(getItem(position))
+            }
         }
     }
+
+    fun setOnClickListener(onClickListener: OnClickListener) {
+        this.onClickListener = onClickListener
+    }
+
+    interface OnClickListener {
+        fun onClick(position: PhoneBook)
+    }
+
 }
 
 private class UserItemDiffCallback : DiffUtil.ItemCallback<PhoneBook>() {
