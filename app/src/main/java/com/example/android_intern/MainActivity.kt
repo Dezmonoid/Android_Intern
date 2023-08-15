@@ -11,27 +11,28 @@ import com.example.android_intern.databinding.ActivityMainBinding
 import com.google.gson.Gson
 
 
-private const val SETTING = "filterSetting"
-private const val TEXT = "filterText"
+private const val PREFERENCES_NAME = "filterSetting"
+private const val KEY_NAME = "filterText"
+private const val EMPTY_STRING = ""
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var sharedPreference: SharedPreferences? = null
     private val gson = Gson()
     private val phoneAdapter = PhoneAdapter()
-    private var loadFilter = ""
+    private lateinit var loadFilter: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        sharedPreference = getSharedPreferences(SETTING, Context.MODE_PRIVATE)
+        sharedPreference = getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
         initRecyclerView()
-        loadFilter = sharedPreference?.getString(TEXT, "").toString()
-        firstFilling(loadFilter)
+        firstFilling()
         setListeners()
     }
 
-    private fun firstFilling(loadFilter: String) {
+    private fun firstFilling() {
+        loadFilter = sharedPreference?.getString(KEY_NAME, EMPTY_STRING).toString()
         if (loadFilter.isEmpty()) {
             phoneAdapter.submitList(getInitNumbers())
         } else {
@@ -55,9 +56,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun saveData() {
-        val sharedEditor = sharedPreference?.edit()
-        sharedEditor?.putString(TEXT, binding.etInputFilter.text.toString())
-        sharedEditor?.apply()
+        sharedPreference
+            ?.edit()
+            ?.putString(KEY_NAME, binding.etInputFilter.text.toString())
+            ?.apply()
     }
 
     private fun getInitNumbers() =
@@ -67,11 +69,6 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.adapter = phoneAdapter
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        saveData()
     }
 
     override fun onPause() {
