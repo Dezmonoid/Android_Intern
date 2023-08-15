@@ -2,7 +2,6 @@ package com.example.android_intern
 
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,23 +9,20 @@ import com.example.android_intern.databinding.ActivityMainBinding
 import com.google.gson.Gson
 
 
-private const val TAG = "Tag"
-
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val gson = Gson()
     private val phoneAdapter = PhoneAdapter()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate")
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initRecyclerView()
-        firstFilling()
+        fillingRecyclerView()
         setListeners()
     }
 
-    private fun firstFilling() {
+    private fun fillingRecyclerView() {
         phoneAdapter.submitList(getInitNumbers())
     }
 
