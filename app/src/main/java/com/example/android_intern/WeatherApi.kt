@@ -9,6 +9,7 @@ interface WeatherApi {
     @GET("forecast?")
     fun getCurrentForecastData(
         @Query("id") city_id: String,
-        @Query("APPID") app_id: String
+        @Query("APPID") app_id: String,
+        @Query("units") units: String
     ): Call<ForecastResponse>
 }

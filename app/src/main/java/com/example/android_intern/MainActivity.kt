@@ -13,22 +13,23 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
 const val APP_ID = "eeba719e0ea1ed0d70d6ea433307695e"
+const val UNITS = "metric"
 const val CITY_ID = "622034"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val adapter = WeatherAdapter()
-    private val retrofit = initRetrofit()
+    private lateinit var apiService: WeatherApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        initRecyclerView()
-        fillRecyclerView()
+        initApiService()
+        DisplayWeather()
     }
 
-    private fun fillRecyclerView() {
-        retrofit.getCurrentForecastData(CITY_ID, APP_ID)
+    private fun callAndFillingWeather() {
+        apiService.getCurrentForecastData(CITY_ID, APP_ID, UNITS)
             .enqueue(object : Callback<ForecastResponse> {
                 override fun onResponse(
                     call: Call<ForecastResponse>,
@@ -41,22 +42,27 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-
                 override fun onFailure(call: Call<ForecastResponse>, t: Throwable) {
                     t.printStackTrace()
                 }
             })
     }
 
-    private fun initRetrofit(): WeatherApi {
-        return Retrofit.Builder()
+    private fun initApiService() {
+        val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
-            .build().create(WeatherApi::class.java)
+            .build()
+        apiService = retrofit.create(WeatherApi::class.java)
     }
 
 
-    private fun initRecyclerView() {
+    private fun DisplayWeather() {
+        initWeatherRecyclerView()
+        callAndFillingWeather()
+    }
+
+    private fun initWeatherRecyclerView() {
         binding.weatherRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.weatherRecyclerView.adapter = adapter
     }

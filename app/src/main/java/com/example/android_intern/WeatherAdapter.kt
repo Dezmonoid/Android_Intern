@@ -7,24 +7,65 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.android_intern.databinding.WeatherItemBinding
+import com.example.android_intern.databinding.WeatherItemColdBinding
+import com.example.android_intern.databinding.WeatherItemHotBinding
+
+private const val TYPE_COLD = 1
+private const val TYPE_HOT = 2
+private const val DEFAULT_TEMPERATURE = 0.0
+private const val THRESHOLD_TEMPERATURE = 20
 
 class WeatherAdapter() :
-    ListAdapter<ForecastResponse.Sky, WeatherViewHolder>(UserItemDiffCallback()) {
+    ListAdapter<ForecastResponse.Sky, RecyclerView.ViewHolder>(UserItemDiffCallback()) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            TYPE_COLD -> {
+                val binding = WeatherItemColdBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                WeatherColdViewHolder(binding)
+            }
 
+            TYPE_HOT -> {
+                val binding = WeatherItemHotBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                WeatherHotViewHolder(binding)
+            }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
-        val binding = WeatherItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return WeatherViewHolder(binding)
+            else -> {
+                error(parent.context.getString(R.string.error_type))
+            }
+        }
     }
 
-    override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (getItemViewType(position)) {
+            TYPE_COLD -> {
+                (holder as WeatherColdViewHolder).bind(getItem(position))
+            }
+
+            TYPE_HOT -> {
+                (holder as WeatherHotViewHolder).bind(getItem(position))
+            }
+        }
     }
 
+    override fun getItemViewType(position: Int): Int {
+        val temp = getItem(position).main?.temp ?: DEFAULT_TEMPERATURE
+        return if (temp < THRESHOLD_TEMPERATURE) {
+            TYPE_COLD
+        } else {
+            TYPE_HOT
+        }
+    }
 }
 
-class WeatherViewHolder(private val binding: WeatherItemBinding) :
+class WeatherColdViewHolder(private val binding: WeatherItemColdBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(forecast: ForecastResponse.Sky) {
         binding.tvDateTime.text = binding.root.context.getString(
@@ -34,16 +75,9 @@ class WeatherViewHolder(private val binding: WeatherItemBinding) :
         binding.tvTemperature.text = binding.root.context.getString(
             R.string.temperature,
             DecimalFormat(binding.root.context.getString(R.string.format)).format(
-                forecast.main?.temp?.minus(
-                    273.15
-                )
+                forecast.main?.temp
             )
         )
-        binding.tvPressure.text = binding.root.context.getString(
-            R.string.pressure,
-            forecast.main?.pressure.toString()
-        )
-
         Glide
             .with(itemView)
             .load(
@@ -53,6 +87,23 @@ class WeatherViewHolder(private val binding: WeatherItemBinding) :
                 )
             )
             .into(binding.ivIcon)
+    }
+}
+
+
+class WeatherHotViewHolder(private val binding: WeatherItemHotBinding) :
+    RecyclerView.ViewHolder(binding.root) {
+    fun bind(forecast: ForecastResponse.Sky) {
+        binding.tvDateTime.text = binding.root.context.getString(
+            R.string.date,
+            forecast.dtTxt
+        )
+        binding.tvTemperature.text = binding.root.context.getString(
+            R.string.temperature,
+            DecimalFormat(binding.root.context.getString(R.string.format)).format(
+                forecast.main?.temp
+            )
+        )
     }
 }
 
