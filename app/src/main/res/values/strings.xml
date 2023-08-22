@@ -9,4 +9,5 @@
     <string name="icon_url">https://openweathermap.org/img/wn/%1$s@2x.png</string>
     <string name="town_name">Shklov</string>
     <string name="error_type">Ошибка, неизвестный тип</string>
+    <string name="connected">Подключение успешно</string>
 </resources>
