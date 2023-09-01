@@ -1,15 +1,18 @@
 package com.example.android_intern
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.load.engine.GlideException
 import com.example.android_intern.databinding.ActivityMainBinding
-import com.google.gson.GsonBuilder
+import com.google.gson.Gson
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import timber.log.Timber
 import java.io.IOException
 
 
@@ -20,55 +23,50 @@ private const val NUMBER_OF_COUNT = 2
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val client = OkHttpClient()
-    private var jsonImageList = mutableListOf<String>()
     private lateinit var request: Request
+    private val adapter = ImageAdapter() { url ->
+        val intent = Intent(binding.root.context, FullImageActivity::class.java)
+        intent.putExtra(FullImageActivity.ARG_URL, url)
+        startActivity(intent)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        editBinding()
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        buildAndCallUrl()
+        initRecyclerView()
+        loadImages()
     }
 
-    private fun buildAndCallUrl() {
-        request = Request.Builder()
-            .url(URL)
-            .build()
-
+    private fun loadImages() {
+        request = buildRequest()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                e.printStackTrace()
+                Timber.e(e.cause, binding.root.context.getString(R.string.error_connect))
             }
-
             override fun onResponse(call: Call, response: Response) {
-                fillingRecyclerView(response)
+                val photo = Gson().fromJson(response.body?.string(), Photo::class.java)
+                val images = photo.photos.photo.map {
+                    it.toUrl()
+                }
+                runOnUiThread() {
+                    adapter.setList(images)
+                }
             }
         })
     }
 
-    private fun fillingRecyclerView(response: Response) {
-        val photo =
-            GsonBuilder().create()
-                .fromJson(response.body!!.string(), Photo::class.java)
-        photo.photos.photo.forEach { photos ->
-            jsonImageList.add(
-                binding.root.context.getString(
-                    R.string.icon_url,
-                    photos.farm.toString(),
-                    photos.server,
-                    photos.id,
-                    photos.secret
-                )
-            )
-        }
-        runOnUiThread()
-        {
-            binding.recyclerView.adapter = ImageAdapter(jsonImageList)
-        }
+    private fun buildRequest() = Request.Builder()
+        .url(URL)
+        .build()
+
+    private fun initRecyclerView() {
+        binding.recyclerView.layoutManager = GridLayoutManager(this, NUMBER_OF_COUNT)
+        binding.recyclerView.adapter = adapter
     }
 
-    private fun editBinding() {
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        binding.recyclerView.layoutManager = GridLayoutManager(this, NUMBER_OF_COUNT)
-    }
 }
+
+private fun Photo.Photos.PhotoX.toUrl(): String =
+    "https://farm$farm.staticflickr.com/$server/${id}_${secret}_z.jpg"
