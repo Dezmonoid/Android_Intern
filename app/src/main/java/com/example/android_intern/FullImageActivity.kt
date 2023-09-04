@@ -10,15 +10,18 @@ import com.example.android_intern.databinding.ActivityFullImageBinding
 private const val EXTRA = "URL"
 
 class FullImageActivity : AppCompatActivity() {
+    companion object {
+        const val ARG_URL = "URL"
+    }
     private lateinit var binding: ActivityFullImageBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFullImageBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        getFullImage()
+        setImage()
     }
 
-    private fun getFullImage() {
+    private fun setImage() {
         Glide
             .with(this)
             .load(intent.getStringExtra(EXTRA))
