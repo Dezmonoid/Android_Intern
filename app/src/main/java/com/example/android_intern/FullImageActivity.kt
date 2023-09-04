@@ -8,13 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.android_intern.databinding.ActivityFullImageBinding
 
-
-private const val EXTRA = "URL"
-private const val TAG = "Result"
-private const val VALUE = "Favorite"
-
 class FullImageActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFullImageBinding
+
+    companion object {
+        const val ARG_URL = "URL"
+        const val TAG = "Result"
+        const val VALUE = "Favorite"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFullImageBinding.inflate(layoutInflater)
@@ -25,7 +27,7 @@ class FullImageActivity : AppCompatActivity() {
     private fun getFullImage() {
         Glide
             .with(this)
-            .load(intent.getStringExtra(EXTRA))
+            .load(intent.getStringExtra(ARG_URL))
             .into(binding.fullImage)
     }
 

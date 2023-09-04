@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Android_Intern</string>
     <string name="back">Назад</string>
-    <string name="icon_url">https://farm%1$s.staticflickr.com/%2$s/%3$s_%4$s_z.jpg</string>
     <string name="add_favorite">Картинка поместилась в избранное!</string>
+    <string name="error_connect">Ошибка подключения</string>
+    <string name="success_connect">Успешное подключение</string>
 </resources>
