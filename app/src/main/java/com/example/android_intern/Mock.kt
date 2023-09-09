@@ -1,5 +1,9 @@
 package com.example.android_intern
 
+import com.google.gson.Gson
+
+fun getInitNumbers() = Gson().fromJson(phoneBookJson, Array<PhoneBook>::class.java).asList()
+
 val phoneBookJson = """[{
     "name": "(Приёмная)",
     "phone": "+375 (2239) 7-17-80",
