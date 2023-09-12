@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android_intern.databinding.PhoneItemBinding
 
-class PhoneAdapter(private val phoneBook: List<PhoneBook>) :
+class PhoneAdapter :
     RecyclerView.Adapter<PhoneViewHolder>() {
-
+    private var phoneBook: List<PhoneBook> = listOf()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhoneViewHolder {
         val binding = PhoneItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PhoneViewHolder(binding)
@@ -19,6 +19,11 @@ class PhoneAdapter(private val phoneBook: List<PhoneBook>) :
 
     override fun onBindViewHolder(holder: PhoneViewHolder, position: Int) {
         holder.bind(phoneBook[position])
+    }
+
+    fun setList(phoneBookExchange: List<PhoneBook>) {
+        phoneBook = phoneBookExchange
+        notifyDataSetChanged()
     }
 }
 
