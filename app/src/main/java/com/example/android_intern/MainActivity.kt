@@ -19,15 +19,14 @@ import java.io.IOException
 private const val URL =
     "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=ff49fcd4d4a08aa6aafb6ea3de826464&tags=cat&format=json&nojsoncallback=1"
 private const val NUMBER_OF_COUNT = 2
+private const val REQUEST_CODE = 1001
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val client = OkHttpClient()
     private lateinit var request: Request
     private val adapter = ImageAdapter() { url ->
-        val intent = Intent(binding.root.context, FullImageActivity::class.java)
-        intent.putExtra(FullImageActivity.ARG_URL, url)
-        startActivityForResult(intent, 1)
+        startFullImageActivity(url)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,16 +67,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (data?.getStringExtra(FullImageActivity.TAG) == FullImageActivity.VALUE) {
-            Snackbar.make(
-                binding.root,
-                binding.root.context.getText(R.string.add_favorite).toString(),
-                Snackbar.LENGTH_SHORT
-            ).show()
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            binding.root.showSnackbar(getString(R.string.add_favorite))
         }
     }
 
+    private fun startFullImageActivity(url: String) {
+        val intent = Intent(binding.root.context, FullImageActivity::class.java)
+        intent.putExtra(FullImageActivity.ARG_URL, url)
+        startActivityForResult(intent, REQUEST_CODE)
+    }
 }
-
-private fun Photo.Photos.PhotoX.toUrl(): String =
-    "https://farm$farm.staticflickr.com/$server/${id}_${secret}_z.jpg"

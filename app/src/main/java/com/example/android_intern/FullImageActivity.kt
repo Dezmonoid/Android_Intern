@@ -13,8 +13,6 @@ class FullImageActivity : AppCompatActivity() {
 
     companion object {
         const val ARG_URL = "URL"
-        const val TAG = "Result"
-        const val VALUE = "Favorite"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +37,6 @@ class FullImageActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val intent = Intent()
-        intent.putExtra(TAG, VALUE)
         setResult(RESULT_OK, intent)
         finish()
         return super.onOptionsItemSelected(item)
