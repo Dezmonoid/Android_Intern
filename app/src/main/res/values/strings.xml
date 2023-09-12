@@ -3,4 +3,5 @@
     <string name="back">Назад</string>
     <string name="error_connect">Ошибка подключения</string>
     <string name="success_connect">Успешное подключение</string>
+    <string name="item_favorite_name">Favorite</string>
 </resources>

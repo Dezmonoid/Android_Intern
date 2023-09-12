@@ -23,9 +23,7 @@ class MainActivity : AppCompatActivity() {
     private val client = OkHttpClient()
     private lateinit var request: Request
     private val adapter = ImageAdapter() { url ->
-        val intent = Intent(binding.root.context, FullImageActivity::class.java)
-        intent.putExtra(FullImageActivity.ARG_URL, url)
-        startActivity(intent)
+        startFullImageActivity(url)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +40,7 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure(call: Call, e: IOException) {
                 Timber.e(e.cause, binding.root.context.getString(R.string.error_connect))
             }
+
             override fun onResponse(call: Call, response: Response) {
                 val photo = Gson().fromJson(response.body?.string(), Photo::class.java)
                 val images = photo.photos.photo.map {
@@ -63,6 +62,11 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.adapter = adapter
     }
 
+    private fun startFullImageActivity(url: String) {
+        val intent = Intent(binding.root.context, FullImageActivity::class.java)
+        intent.putExtra(FullImageActivity.ARG_URL, url)
+        startActivity(intent)
+    }
 }
 
 private fun Photo.Photos.PhotoX.toUrl(): String =
