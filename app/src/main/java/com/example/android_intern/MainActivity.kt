@@ -18,11 +18,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initRecyclerView()
-        fillingRecyclerView()
+        setDateAdapter()
         setListeners()
     }
 
-    private fun fillingRecyclerView() {
+    private fun setDateAdapter() {
         phoneAdapter.submitList(getInitNumbers())
     }
 
