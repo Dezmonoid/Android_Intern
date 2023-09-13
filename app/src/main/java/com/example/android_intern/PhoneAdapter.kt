@@ -10,7 +10,7 @@ import com.example.android_intern.databinding.PhoneItemBinding
 
 class PhoneAdapter :
     ListAdapter<PhoneBook, PhoneViewHolder>(UserItemDiffCallback()) {
-    private var onClickListener: OnClickListener? = null
+    private lateinit var onClickListener: OnClickListener
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhoneViewHolder {
         val binding = PhoneItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PhoneViewHolder(binding)
@@ -19,9 +19,7 @@ class PhoneAdapter :
     override fun onBindViewHolder(holder: PhoneViewHolder, position: Int) {
         holder.bind(getItem(position))
         holder.itemView.setOnClickListener {
-            if (onClickListener != null) {
-                onClickListener!!.onClick(getItem(position))
-            }
+            onClickListener.onClick(getItem(position))
         }
     }
 
@@ -43,7 +41,7 @@ private class UserItemDiffCallback : DiffUtil.ItemCallback<PhoneBook>() {
         oldItem == newItem
 }
 
-class PhoneViewHolder(val binding: PhoneItemBinding) :
+class PhoneViewHolder(private val binding: PhoneItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(phoneBook: PhoneBook) {
         binding.tvName.text = binding.root.context.getString(

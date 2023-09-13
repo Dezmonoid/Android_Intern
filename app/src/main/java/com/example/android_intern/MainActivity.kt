@@ -17,13 +17,12 @@ import com.google.gson.Gson
 private const val PREFERENCES_NAME = "filterSetting"
 private const val KEY_NAME = "filterText"
 private const val CALL = "tel:"
-private const val EMPTY_STRING = ""
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private var sharedPreference: SharedPreferences? = null
+    private lateinit var sharedPreference: SharedPreferences
     private val gson = Gson()
-    private val phoneAdapter = PhoneAdapter()
+    private val adapter = PhoneAdapter()
     private lateinit var loadFilter: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,51 +30,54 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         sharedPreference = getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
         initRecyclerView()
-        firstFilling()
-        setListeners()
-        callSelectedNumber()
+        loadFilterAndSetPhoneBook()
+        setFilterListeners()
+        setItemsListener()
     }
 
-    private fun callSelectedNumber() {
-        phoneAdapter.setOnClickListener(object :
+    private fun setItemsListener() {
+        adapter.setOnClickListener(object :
             PhoneAdapter.OnClickListener {
             override fun onClick(position: PhoneBook) {
-                val intent =
-                    Intent(Intent.ACTION_CALL, Uri.parse(CALL + position.phone))
-                ContextCompat.startActivity(binding.root.context, intent, null)
+                callNumber(position)
             }
         })
     }
 
-    private fun firstFilling() {
-        loadFilter = sharedPreference?.getString(KEY_NAME, EMPTY_STRING).toString()
+    private fun callNumber(position: PhoneBook) {
+        val intent =
+            Intent(Intent.ACTION_CALL, Uri.parse(CALL + position.phone))
+        ContextCompat.startActivity(binding.root.context, intent, null)
+    }
+
+    private fun loadFilterAndSetPhoneBook() {
+        loadFilter = sharedPreference.getString(KEY_NAME, null).orEmpty()
         if (loadFilter.isEmpty()) {
-            phoneAdapter.submitList(getInitNumbers())
+            adapter.submitList(getInitNumbers())
         } else {
-            phoneAdapter.submitList(getInitNumbers().filter {
+            adapter.submitList(getInitNumbers().filter {
                 "${it.name} ${it.phone} ${it.type}".contains(
                     loadFilter
                 )
             })
             binding.etInputFilter.setText(loadFilter)
         }
-
     }
 
-    private fun setListeners() {
+    private fun setFilterListeners() {
         binding.etInputFilter.addTextChangedListener {
             val filteredList =
                 getInitNumbers().filter { "${it.name} ${it.phone} ${it.type}".contains(binding.etInputFilter.text) }
-            phoneAdapter.submitList(filteredList)
+            adapter.submitList(filteredList)
             savingCurrentFilter()
         }
     }
 
     private fun savingCurrentFilter() {
         sharedPreference
-            ?.edit()
-            ?.putString(KEY_NAME, binding.etInputFilter.text.toString())
-            ?.apply()
+            .edit()
+            .putString(KEY_NAME, binding.etInputFilter.text.toString())
+            .apply()
     }
 
     private fun getInitNumbers() =
@@ -84,7 +86,7 @@ class MainActivity : AppCompatActivity() {
     private fun initRecyclerView() {
         binding.recyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        binding.recyclerView.adapter = phoneAdapter
+        binding.recyclerView.adapter = adapter
     }
 
     override fun onPause() {
