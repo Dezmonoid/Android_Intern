@@ -13,11 +13,10 @@ import com.google.gson.Gson
 
 private const val PREFERENCES_NAME = "filterSetting"
 private const val KEY_NAME = "filterText"
-private const val EMPTY_STRING = ""
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private var sharedPreference: SharedPreferences? = null
+    private lateinit var sharedPreference: SharedPreferences
     private val gson = Gson()
     private val phoneAdapter = PhoneAdapter()
     private lateinit var loadFilter: String
@@ -27,12 +26,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         sharedPreference = getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
         initRecyclerView()
-        firstFilling()
+        loadFilterAndSetPhoneBook()
         setListeners()
     }
 
-    private fun firstFilling() {
-        loadFilter = sharedPreference?.getString(KEY_NAME, EMPTY_STRING).toString()
+    private fun loadFilterAndSetPhoneBook() {
+        loadFilter = sharedPreference.getString(KEY_NAME, null).orEmpty()
         if (loadFilter.isEmpty()) {
             phoneAdapter.submitList(getInitNumbers())
         } else {
@@ -51,15 +50,15 @@ class MainActivity : AppCompatActivity() {
             val filteredList =
                 getInitNumbers().filter { "${it.name} ${it.phone} ${it.type}".contains(binding.etInputFilter.text) }
             phoneAdapter.submitList(filteredList)
-            saveData()
+            saveStateFilter()
         }
     }
 
-    private fun saveData() {
+    private fun saveStateFilter() {
         sharedPreference
-            ?.edit()
-            ?.putString(KEY_NAME, binding.etInputFilter.text.toString())
-            ?.apply()
+            .edit()
+            .putString(KEY_NAME, binding.etInputFilter.text.toString())
+            .apply()
     }
 
     private fun getInitNumbers() =
@@ -73,6 +72,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        saveData()
+        saveStateFilter()
     }
 }
