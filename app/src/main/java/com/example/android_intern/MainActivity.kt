@@ -25,10 +25,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initApiService()
-        DisplayWeather()
+        initWeatherRecyclerView()
+        callAndSetWeather()
     }
 
-    private fun callAndFillingWeather() {
+    private fun callAndSetWeather() {
         apiService.getCurrentForecastData(CITY_ID, APP_ID, UNITS)
             .enqueue(object : Callback<ForecastResponse> {
                 override fun onResponse(
@@ -36,12 +37,13 @@ class MainActivity : AppCompatActivity() {
                     response: Response<ForecastResponse>
                 ) {
                     if (response.isSuccessful) {
-                        val forecastGetList = response.body()!!
+                        val forecastGetList = response.body()!!.list
                         runOnUiThread {
-                            adapter.submitList(forecastGetList.list)
+                            adapter.submitList(forecastGetList)
                         }
                     }
                 }
+
                 override fun onFailure(call: Call<ForecastResponse>, t: Throwable) {
                     t.printStackTrace()
                 }
@@ -54,12 +56,6 @@ class MainActivity : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         apiService = retrofit.create(WeatherApi::class.java)
-    }
-
-
-    private fun DisplayWeather() {
-        initWeatherRecyclerView()
-        callAndFillingWeather()
     }
 
     private fun initWeatherRecyclerView() {
