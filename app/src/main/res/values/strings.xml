@@ -10,4 +10,5 @@
     <string name="town_name">Shklov</string>
     <string name="error_type">Ошибка, неизвестный тип</string>
     <string name="connected">Подключение успешно</string>
+    <string name="error_connect">Ошибка подключения</string>
 </resources>
