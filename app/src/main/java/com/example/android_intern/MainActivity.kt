@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_intern.databinding.ActivityMainBinding
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,30 +26,30 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val adapter = WeatherAdapter()
     private lateinit var apiService: WeatherApi
-    private lateinit var savedJson: String
     private val gson = Gson()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initWeatherRecyclerView()
         if (savedInstanceState == null) {
             initApiService()
-            initWeatherRecyclerView()
             callAndSetWeather()
         } else {
-            initWeatherRecyclerView()
-            loadSaveWeather(savedInstanceState)
+            getSavedWeather(savedInstanceState)
         }
     }
 
-    private fun loadSaveWeather(savedInstanceState: Bundle) {
-        savedJson = savedInstanceState.getString(SAVED_TAG).toString()
-        adapter.submitList(gson.fromJson(savedJson, ForecastResponse::class.java).list)
+    private fun getSavedWeather(bundle: Bundle) {
+        val savedJson = bundle.getString(SAVED_TAG).toString()
+        val typeToken = object:TypeToken<List<ForecastResponse.Sky>>(){}.type
+        adapter.submitList(gson.fromJson(savedJson, typeToken))
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(SAVED_TAG, savedJson)
+        val gettingJson = gson.toJson(adapter.currentList)
+        outState.putString(SAVED_TAG, gettingJson)
     }
 
     private fun callAndSetWeather() {
@@ -60,19 +61,18 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         val forecastGetList = response.body()!!
-                        savedJson = gson.toJson(forecastGetList)
-                        Log.i(TAG_CONNECT, binding.root.context.getString(R.string.connected))
+                        Log.d(TAG, binding.root.context.getString(R.string.connected))
                         runOnUiThread {
                             adapter.submitList(forecastGetList.list)
                         }
                     }
                     else {
-                        Log.i(TAG_ERROR, binding.root.context.getString(R.string.error_connect))
+                        Log.d(TAG, binding.root.context.getString(R.string.error_connect))
                     }
                 }
 
                 override fun onFailure(call: Call<ForecastResponse>, t: Throwable) {
-                    t.printStackTrace()
+                    Log.e(TAG,t.message,t)
                 }
             })
     }
