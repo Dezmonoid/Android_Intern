@@ -26,10 +26,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         initApiService()
         initWeatherRecyclerView()
-        callAndSetWeather()
+        loadWeather()
     }
 
-    private fun callAndSetWeather() {
+    private fun loadWeather() {
         apiService.getCurrentForecastData(CITY_ID, APP_ID, UNITS)
             .enqueue(object : Callback<ForecastResponse> {
                 override fun onResponse(
