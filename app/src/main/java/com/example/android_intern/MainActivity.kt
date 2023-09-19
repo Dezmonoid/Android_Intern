@@ -16,7 +16,7 @@ const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
 const val APP_ID = "eeba719e0ea1ed0d70d6ea433307695e"
 const val UNITS = "metric"
 const val CITY_ID = "622034"
-const val RETROFIT_TAG = "Connection"
+const val TAG = "Debug"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -26,18 +26,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Log.i(RETROFIT_TAG, (WeatherStore.weathers == null).toString())
-        if (WeatherStore.weathers == null) {
+        initWeatherRecyclerView()
+        Log.d(TAG, (WeatherStore.get() == null).toString())
+        if (WeatherStore.get() == null) {
             initApiService()
-            initWeatherRecyclerView()
-            callAndFillingWeather()
+            loadWeather()
         } else {
-            initWeatherRecyclerView()
-            adapter.submitList(WeatherStore.weathers?.list)
+            adapter.submitList(WeatherStore.get()?.list)
         }
     }
 
-    private fun callAndFillingWeather() {
+    private fun loadWeather() {
         apiService.getCurrentForecastData(CITY_ID, APP_ID, UNITS)
             .enqueue(object : Callback<ForecastResponse> {
                 override fun onResponse(
@@ -46,11 +45,13 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         val forecastGetList = response.body()!!
-                        WeatherStore.weathers = forecastGetList
-                        Log.i(RETROFIT_TAG, binding.root.context.getString(R.string.connected))
+                        WeatherStore.set(forecastGetList)
+                        Log.d(TAG, binding.root.context.getString(R.string.connected))
                         runOnUiThread {
                             adapter.submitList(forecastGetList.list)
                         }
+                    } else {
+                        Log.d(TAG, binding.root.context.getString(R.string.error_connected))
                     }
                 }
 

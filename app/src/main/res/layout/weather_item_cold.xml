@@ -9,7 +9,7 @@
     android:padding="12sp">
 
     <TextView
-        android:id="@+id/tv_date_time"
+        android:id="@+id/tvDateTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
@@ -17,18 +17,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_temperature"
+        android:id="@+id/tvTemperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16sp"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@id/iv_temperature_icon"
-        app:layout_constraintEnd_toStartOf="@id/iv_temperature_icon"
-        app:layout_constraintStart_toEndOf="@id/iv_icon"
-        app:layout_constraintTop_toTopOf="@id/iv_temperature_icon" />
+        app:layout_constraintBottom_toBottomOf="@id/ivTemperatureIcon"
+        app:layout_constraintEnd_toStartOf="@id/ivTemperatureIcon"
+        app:layout_constraintStart_toEndOf="@id/ivIcon"
+        app:layout_constraintTop_toTopOf="@id/ivTemperatureIcon" />
 
     <ImageView
-        android:id="@+id/iv_icon"
+        android:id="@+id/ivIcon"
         android:layout_width="50dp"
         android:layout_height="50dp"
 
@@ -38,13 +38,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/iv_temperature_icon"
+        android:id="@+id/ivTemperatureIcon"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="8sp"
         android:src="@drawable/cold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tv_temperature" />
+        app:layout_constraintStart_toEndOf="@id/tvTemperature" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
