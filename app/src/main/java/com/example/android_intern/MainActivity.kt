@@ -19,8 +19,7 @@ const val APP_ID = "eeba719e0ea1ed0d70d6ea433307695e"
 const val UNITS = "metric"
 const val CITY_ID = "622034"
 const val SAVED_TAG = "Saved Json"
-const val TAG_CONNECT = "Connection"
-const val TAG_ERROR = "Error"
+const val TAG = "Debug"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -41,15 +40,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getSavedWeather(bundle: Bundle) {
-        val savedJson = bundle.getString(SAVED_TAG).toString()
+        val json = bundle.getString(SAVED_TAG).toString()
         val typeToken = object:TypeToken<List<ForecastResponse.Sky>>(){}.type
-        adapter.submitList(gson.fromJson(savedJson, typeToken))
+        adapter.submitList(gson.fromJson(json, typeToken))
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val gettingJson = gson.toJson(adapter.currentList)
-        outState.putString(SAVED_TAG, gettingJson)
+        val json = gson.toJson(adapter.currentList)
+        outState.putString(SAVED_TAG, json)
     }
 
     private fun callAndSetWeather() {
