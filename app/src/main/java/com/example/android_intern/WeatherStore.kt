@@ -1,5 +1,10 @@
 package com.example.android_intern
 
 object WeatherStore {
-   var weathers:ForecastResponse? = null
+   private var weathers:ForecastResponse? = null
+
+   fun get() = weathers
+   fun set(value: ForecastResponse?) {
+      weathers = value
+   }
 }
