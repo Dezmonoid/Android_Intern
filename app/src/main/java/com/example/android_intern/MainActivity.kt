@@ -16,7 +16,7 @@ const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
 const val APP_ID = "eeba719e0ea1ed0d70d6ea433307695e"
 const val UNITS = "metric"
 const val CITY_ID = "622034"
-const val TAG_ERROR = "Ошибка"
+const val TAG = "Debug"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -28,10 +28,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         initApiService()
         initWeatherRecyclerView()
-        callAndSetWeather()
+        loadWeather()
     }
 
-    private fun callAndSetWeather() {
+    private fun loadWeather() {
         apiService.getCurrentForecastData(CITY_ID, APP_ID, UNITS)
             .enqueue(object : Callback<ForecastResponse> {
                 override fun onResponse(
@@ -44,12 +44,12 @@ class MainActivity : AppCompatActivity() {
                             adapter.submitList(forecastGetList.list)
                         }
                     } else {
-                        Log.e(TAG_ERROR, binding.root.context.getString(R.string.error_connect))
+                        Log.e(TAG, binding.root.context.getString(R.string.error_connect))
                     }
                 }
 
                 override fun onFailure(call: Call<ForecastResponse>, t: Throwable) {
-                    t.printStackTrace()
+                    Log.e(TAG, t.message,t)
                 }
             })
     }
