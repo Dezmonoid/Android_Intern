@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadWeather() {
-        apiService.getCurrentForecastData(CITY_ID, APP_ID, UNITS)
+        apiService.getCurrentForecastData(cityId = CITY_ID, appId = APP_ID, units = UNITS)
             .enqueue(object : Callback<ForecastResponse> {
                 override fun onResponse(
                     call: Call<ForecastResponse>,
