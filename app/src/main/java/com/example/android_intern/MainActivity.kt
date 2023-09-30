@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var sharedPreference: SharedPreferences
     private val gson = Gson()
-    private val adapter = PhoneAdapter()
+    private val adapter = PhoneAdapter(){phoneBook -> callNumber(phoneBook) }
     private lateinit var loadFilter: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,16 +32,6 @@ class MainActivity : AppCompatActivity() {
         initRecyclerView()
         loadFilterAndSetPhoneBook()
         setFilterListeners()
-        setItemsListener()
-    }
-
-    private fun setItemsListener() {
-        adapter.setOnClickListener(object :
-            PhoneAdapter.OnClickListener {
-            override fun onClick(position: PhoneBook) {
-                callNumber(position)
-            }
-        })
     }
 
     private fun callNumber(position: PhoneBook) {
