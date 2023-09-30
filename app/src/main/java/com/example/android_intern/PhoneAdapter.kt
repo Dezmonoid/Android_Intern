@@ -8,29 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_intern.databinding.PhoneItemBinding
 
 
-class PhoneAdapter :
+class PhoneAdapter(
+    private val onItemClick: (phoneBook: PhoneBook) -> Unit
+) :
     ListAdapter<PhoneBook, PhoneViewHolder>(UserItemDiffCallback()) {
-    private var onClickListener: OnClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhoneViewHolder {
         val binding = PhoneItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PhoneViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: PhoneViewHolder, position: Int) {
-        holder.bind(getItem(position))
-        holder.itemView.setOnClickListener {
-            if (onClickListener != null) {
-                onClickListener!!.onClick(getItem(position))
-            }
-        }
-    }
-
-    fun setOnClickListener(onClickListener: OnClickListener) {
-        this.onClickListener = onClickListener
-    }
-
-    interface OnClickListener {
-        fun onClick(position: PhoneBook)
+        holder.bind(getItem(position), onItemClick)
     }
 
 }
@@ -45,7 +33,7 @@ private class UserItemDiffCallback : DiffUtil.ItemCallback<PhoneBook>() {
 
 class PhoneViewHolder(val binding: PhoneItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
-    fun bind(phoneBook: PhoneBook) {
+    fun bind(phoneBook: PhoneBook, onItemClick: (phoneBook: PhoneBook) -> Unit) {
         binding.tvName.text = binding.root.context.getString(
             R.string.name,
             phoneBook.name
@@ -58,5 +46,8 @@ class PhoneViewHolder(val binding: PhoneItemBinding) :
             R.string.type,
             phoneBook.type
         )
+        this.itemView.setOnClickListener {
+            onItemClick(phoneBook)
+        }
     }
 }
