@@ -22,9 +22,8 @@ const val TAG = "Debug"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val adapter = WeatherAdapter()
+    private val setWeather = WeatherAdapter()
     private lateinit var apiService: WeatherApi
-    private val clientInterceptor = interceptorBuild()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,17 +31,20 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initWeatherRecyclerView()
-        Log.d(TAG, (WeatherStore.get() == null).toString())
-        if (WeatherStore.get() == null) {
-            initApiService()
-            loadWeather()
-        } else {
-            adapter.submitList(WeatherStore.get()?.list)
-        }
+        loadWeather()
     }
 
     private fun loadWeather() {
-        apiService.getCurrentForecastData(CITY_ID, APP_ID, UNITS)
+        if (WeatherStore.get() == null) {
+            initApiService()
+            setWeatherRecyclerView()
+        } else {
+            setWeather.submitList(WeatherStore.get()?.list)
+        }
+    }
+
+    private fun setWeatherRecyclerView() {
+        apiService.getCurrentForecastData(cityId = CITY_ID, appId = APP_ID, units = UNITS)
             .enqueue(object : Callback<ForecastResponse> {
                 override fun onResponse(
                     call: Call<ForecastResponse>,
@@ -53,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                         WeatherStore.set(forecastGetList)
                         Log.d(TAG, binding.root.context.getString(R.string.connected))
                         runOnUiThread {
-                            adapter.submitList(forecastGetList.list)
+                            setWeather.submitList(forecastGetList.list)
                         }
                     } else {
                         Log.d(TAG, binding.root.context.getString(R.string.error_connected))
@@ -74,16 +76,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun initWeatherRecyclerView() {
         binding.weatherRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.weatherRecyclerView.adapter = adapter
+        binding.weatherRecyclerView.adapter = setWeather
     }
 
     private fun retrofitBuild(): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
-        .client(clientInterceptor)
+        .client(initInterceptor())
         .build()
 
-    private fun interceptorBuild() = OkHttpClient.Builder()
+    private fun initInterceptor() = OkHttpClient.Builder()
         .addInterceptor(
             HttpLoggingInterceptor()
                 .setLevel(HttpLoggingInterceptor.Level.BASIC)
