@@ -31,9 +31,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initWeatherRecyclerView()
+        loadWeather(savedInstanceState)
+    }
+
+    private fun loadWeather(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             initApiService()
-            callAndSetWeather()
+            setWeatherRecyclerView()
         } else {
             getSavedWeather(savedInstanceState)
         }
@@ -41,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun getSavedWeather(bundle: Bundle) {
         val json = bundle.getString(SAVED_TAG).toString()
-        val typeToken = object:TypeToken<List<ForecastResponse.Sky>>(){}.type
+        val typeToken = object : TypeToken<List<ForecastResponse.Sky>>() {}.type
         adapter.submitList(gson.fromJson(json, typeToken))
     }
 
@@ -51,8 +55,8 @@ class MainActivity : AppCompatActivity() {
         outState.putString(SAVED_TAG, json)
     }
 
-    private fun callAndSetWeather() {
-        apiService.getCurrentForecastData(CITY_ID, APP_ID, UNITS)
+    private fun setWeatherRecyclerView() {
+        apiService.getCurrentForecastData(cityId = CITY_ID, appId = APP_ID, units = UNITS)
             .enqueue(object : Callback<ForecastResponse> {
                 override fun onResponse(
                     call: Call<ForecastResponse>,
@@ -64,14 +68,13 @@ class MainActivity : AppCompatActivity() {
                         runOnUiThread {
                             adapter.submitList(forecastGetList.list)
                         }
-                    }
-                    else {
+                    } else {
                         Log.d(TAG, binding.root.context.getString(R.string.error_connect))
                     }
                 }
 
                 override fun onFailure(call: Call<ForecastResponse>, t: Throwable) {
-                    Log.e(TAG,t.message,t)
+                    Log.e(TAG, t.message, t)
                 }
             })
     }
