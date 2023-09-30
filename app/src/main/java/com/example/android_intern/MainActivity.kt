@@ -27,17 +27,24 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initWeatherRecyclerView()
-        Log.d(TAG, (WeatherStore.get() == null).toString())
-        if (WeatherStore.get() == null) {
-            initApiService()
-            loadWeather()
-        } else {
-            adapter.submitList(WeatherStore.get()?.list)
-        }
+        loadWeather()
     }
 
     private fun loadWeather() {
-        apiService.getCurrentForecastData(CITY_ID, APP_ID, UNITS)
+        if (WeatherStore.get() == null) {
+            initApiService()
+            setWeatherRecyclerView()
+        } else {
+            setWeather()
+        }
+    }
+
+    private fun setWeather() {
+        adapter.submitList(WeatherStore.get()?.list)
+    }
+
+    private fun setWeatherRecyclerView() {
+        apiService.getCurrentForecastData(cityId = CITY_ID, appId = APP_ID, units = UNITS)
             .enqueue(object : Callback<ForecastResponse> {
                 override fun onResponse(
                     call: Call<ForecastResponse>,
@@ -56,7 +63,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<ForecastResponse>, t: Throwable) {
-                    t.printStackTrace()
+                    Log.e(TAG, t.message, t)
                 }
             })
     }
