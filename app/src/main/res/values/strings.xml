@@ -1,12 +1,7 @@
 <resources>
     <string name="app_name">Android_Intern</string>
-    <string name="button_text">Фильтровать</string>
-    <string name="ET_text">Введите текст фильтра</string>
-    <string name="date">%1$s</string>
-    <string name="temperature">%1$s С</string>
-    <string name="pressure">%1$s мм рт. ст.</string>
-    <string name="format">#.##</string>
-    <string name="icon_url">https://openweathermap.org/img/wn/%1$s@2x.png</string>
-    <string name="town_name">Shklov</string>
-    <string name="error_type">Ошибка, неизвестный тип</string>
+    <string name="name_character">Rick and Morty</string>
+    <string name="name_episode">Episode</string>
+    <string name="button_prev">Prev</string>
+    <string name="button_next">Next</string>
 </resources>

@@ -12,42 +12,51 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
-const val APP_ID = "eeba719e0ea1ed0d70d6ea433307695e"
-const val UNITS = "metric"
-const val CITY_ID = "622034"
+const val BASE_URL = "https://rickandmortyapi.com/api/"
 const val TAG = "Error"
+const val FIRST_PAGE = 1
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val adapter = WeatherAdapter()
-    private lateinit var apiService: WeatherApi
+    private val adapter = CharacterAdapter()
+    private lateinit var apiService: RickAndMortyApi
+    private var page = FIRST_PAGE
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initApiService()
-        initWeatherRecyclerView()
-        loadWeather()
+        initCharacterRecyclerView()
+        loadCharacter(FIRST_PAGE)
+        setButtonListener()
     }
 
-    private fun loadWeather() {
-        apiService.getCurrentForecastData(city_id = CITY_ID, app_id = APP_ID, units = UNITS)
-            .enqueue(object : Callback<ForecastResponse> {
+    private fun setButtonListener() {
+        binding.nextPage.setOnClickListener {
+            loadCharacter(++page)
+        }
+        binding.prevPage.setOnClickListener {
+            loadCharacter(--page)
+        }
+    }
+
+    private fun loadCharacter(pages: Int) {
+        apiService.getCharacter(pages)
+            .enqueue(object : Callback<Character> {
                 override fun onResponse(
-                    call: Call<ForecastResponse>,
-                    response: Response<ForecastResponse>
+                    call: Call<Character>,
+                    response: Response<Character>
                 ) {
                     if (response.isSuccessful) {
-                        val forecastGetList = response.body()?.list
+                        val charactersList = response.body()?.results
                         runOnUiThread {
-                            adapter.submitList(forecastGetList)
+                            adapter.submitList(charactersList)
                         }
                     }
                 }
 
-                override fun onFailure(call: Call<ForecastResponse>, t: Throwable) {
-                    Log.e(TAG,t.message,t)
+                override fun onFailure(call: Call<Character>, t: Throwable) {
+                    Log.e(TAG, t.message, t)
                 }
             })
     }
@@ -57,11 +66,11 @@ class MainActivity : AppCompatActivity() {
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        apiService = retrofit.create(WeatherApi::class.java)
+        apiService = retrofit.create(RickAndMortyApi::class.java)
     }
 
-    private fun initWeatherRecyclerView() {
-        binding.weatherRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.weatherRecyclerView.adapter = adapter
+    private fun initCharacterRecyclerView() {
+        binding.characterRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.characterRecyclerView.adapter = adapter
     }
 }
