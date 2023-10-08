@@ -2,10 +2,9 @@ package com.example.android_intern
 
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_intern.databinding.ActivityMainBinding
 
@@ -19,16 +18,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val adapter = WeatherAdapter()
     private val viewModel by viewModels<ForecastViewModel>()
+    private lateinit var data: LiveData<List<ForecastResponse.Sky>?>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initWeatherRecyclerView()
+        observeLiveData()
     }
 
-    override fun onStart() {
-        super.onStart()
-
+    private fun observeLiveData() {
+        data = viewModel.getData()
+        data.observe(this) {
+            adapter.submitList(data.value)
+        }
     }
 
     private fun initWeatherRecyclerView() {

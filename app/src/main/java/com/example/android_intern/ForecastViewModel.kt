@@ -1,6 +1,8 @@
 package com.example.android_intern
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -8,14 +10,18 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
 class ForecastViewModel : ViewModel() {
     private lateinit var apiService: WeatherApi
-    private var forecastList: List<ForecastResponse.Sky>? = null
+    private val forecastLiveData = MutableLiveData<List<ForecastResponse.Sky>?>()
 
-    init{
+    fun getData(): LiveData<List<ForecastResponse.Sky>?> {
+        return forecastLiveData
+    }
+
+    init {
         initApiService()
-        Log.i(TAG,"Инициализация")
-        Log.i(TAG,Thread.currentThread().toString())
+        loadWeather()
     }
 
     private fun initApiService() {
@@ -26,17 +32,15 @@ class ForecastViewModel : ViewModel() {
         apiService = retrofit.create(WeatherApi::class.java)
     }
 
-    fun loadWeather(){
+    private fun loadWeather() {
         apiService.getCurrentForecastData(cityId = CITY_ID, appId = APP_ID, units = UNITS)
             .enqueue(object : Callback<ForecastResponse> {
                 override fun onResponse(
                     call: Call<ForecastResponse>,
                     response: Response<ForecastResponse>
                 ) {
-                    forecastList = response.body()?.list
-                    Log.i(TAG,"Получил список:${forecastList.toString()}")
-                    Log.i(TAG,Thread.currentThread().toString())
-
+                    val forecastList = response.body()?.list
+                    forecastLiveData.value = forecastList
                 }
 
                 override fun onFailure(call: Call<ForecastResponse>, t: Throwable) {
@@ -44,6 +48,5 @@ class ForecastViewModel : ViewModel() {
                 }
             })
     }
-    fun getForecast() = forecastList
 
 }
