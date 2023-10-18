@@ -8,16 +8,13 @@ import com.example.android_intern.databinding.ActivityMainBinding
 import com.example.android_intern.fragment.CharacterFragment
 
 
-
-
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //initApiService()
-        changeFragment(CharacterFragment())
+        changeFragment(CharacterFragment(this))
     }
 
     fun changeFragment(fragment: Fragment) {

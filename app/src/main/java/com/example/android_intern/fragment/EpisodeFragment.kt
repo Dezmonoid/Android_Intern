@@ -1,5 +1,6 @@
 package com.example.android_intern.fragment
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,11 +9,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_intern.App
+import com.example.android_intern.Episode
+import com.example.android_intern.R
 import com.example.android_intern.adapter.EpisodeAdapter
 import com.example.android_intern.databinding.EpisodeFragmentBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class EpisodeFragment(var episode: String) : Fragment() {
     private lateinit var binding: EpisodeFragmentBinding
@@ -34,15 +37,27 @@ class EpisodeFragment(var episode: String) : Fragment() {
     }
 
     private fun loadEpisode() {
-        //withcontext
-        CoroutineScope(Dispatchers.IO).launch {
-            val episodeList = App.apiService.getEpisode(
-                episode).execute().body()
-            Log.i("Debug",episodeList.toString())
-            CoroutineScope(Dispatchers.Main).launch {
-                adapter.submitList(episodeList)
-            }
-        }
+        App.apiService.getEpisode(episode)
+            .enqueue(object : Callback<Episode> {
+                override fun onResponse(
+                    call: Call<Episode>,
+                    response: Response<Episode>
+                ) {
+                    if (response.isSuccessful) {
+                        val episodeList = response.body()
+                        Log.d(TAG, binding.root.context.getString(R.string.connected))
+                        activity?.runOnUiThread {
+                            adapter.submitList(episodeList)
+                        }
+                    } else {
+                        Log.d(TAG, binding.root.context.getString(R.string.error_connected))
+                    }
+                }
+
+                override fun onFailure(call: Call<Episode>, t: Throwable) {
+                    Log.e(TAG, t.message, t)
+                }
+            })
     }
 
     private fun initCharacterRecyclerView() {

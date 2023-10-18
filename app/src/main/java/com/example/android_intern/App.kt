@@ -1,8 +1,6 @@
 package com.example.android_intern
 
 import android.app.Application
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -13,16 +11,9 @@ class App : Application() {
         var apiService = initApiService()
             private set
 
-        private fun initApiService():RickAndMortyApi {
-            val intercepter = HttpLoggingInterceptor().apply {
-                this.level = HttpLoggingInterceptor.Level.BODY
-            }
-            val client = OkHttpClient.Builder().apply {
-                this.addInterceptor(intercepter)
-            }.build()
+        private fun initApiService(): RickAndMortyApi {
             val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
             return retrofit.create(RickAndMortyApi::class.java)

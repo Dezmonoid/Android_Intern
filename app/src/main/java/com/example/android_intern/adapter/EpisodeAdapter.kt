@@ -9,7 +9,7 @@ import com.example.android_intern.Episode
 import com.example.android_intern.databinding.EpisodeItemBinding
 
 
-class EpisodeAdapter() : ListAdapter<Episode.EpisodeItem, EpisodeViewHolder>(EpisodeDiffCallback()) {
+class EpisodeAdapter : ListAdapter<Episode.EpisodeItem, EpisodeViewHolder>(EpisodeDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EpisodeViewHolder {
         val binding =
             EpisodeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
