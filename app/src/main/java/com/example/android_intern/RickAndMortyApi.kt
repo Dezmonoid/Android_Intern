@@ -3,14 +3,16 @@ package com.example.android_intern
 
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.PATCH
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface RickAndMortyApi {
     @GET("character?")
-    fun getCharacter(
-        @Query("page") pageID: Int
-    ): Call<Character>
+    fun getCharacter(): Call<Character>
 
-    @GET("episode")
-    fun getEpisode(): Call<Episode>
+    @GET("episode/{id}")
+        fun getEpisode(
+        @Path("id") postId: String
+    ): Call<Episode>
 }
