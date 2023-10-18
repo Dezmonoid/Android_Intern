@@ -39,9 +39,9 @@ class MainActivity : AppCompatActivity() {
                     response: Response<ForecastResponse>
                 ) {
                     if (response.isSuccessful) {
-                        val forecastGetList = response.body()?.list
+                        val forecastList = response.body()?.list
                         runOnUiThread {
-                            adapter.submitList(forecastGetList)
+                            adapter.submitList(forecastList)
                         }
                     }
                 }

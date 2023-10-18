@@ -83,7 +83,7 @@ class WeatherColdViewHolder(private val binding: WeatherItemColdBinding) :
             .load(
                 binding.root.context.getString(
                     R.string.icon_url,
-                    forecast.weather?.get(0)!!.icon
+                    forecast.weather?.get(0)?.icon
                 )
             )
             .into(binding.ivIcon)
