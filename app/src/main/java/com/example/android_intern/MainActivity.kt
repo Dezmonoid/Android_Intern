@@ -34,9 +34,9 @@ class MainActivity : AppCompatActivity() {
         setFilterListeners()
     }
 
-    private fun callNumber(position: PhoneBook) {
+    private fun callNumber(number: String) {
         val intent =
-            Intent(Intent.ACTION_CALL, Uri.parse(CALL + position.phone))
+            Intent(Intent.ACTION_CALL, Uri.parse(CALL + number))
         ContextCompat.startActivity(binding.root.context, intent, null)
     }
 

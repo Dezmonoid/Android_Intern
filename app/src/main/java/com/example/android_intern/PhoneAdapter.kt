@@ -9,7 +9,7 @@ import com.example.android_intern.databinding.PhoneItemBinding
 
 
 class PhoneAdapter(
-    private val onItemClick: (phoneBook: PhoneBook) -> Unit
+    private val onItemClick: (number: String) -> Unit
 ) :
     ListAdapter<PhoneBook, PhoneViewHolder>(UserItemDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhoneViewHolder {
@@ -35,21 +35,21 @@ private class UserItemDiffCallback : DiffUtil.ItemCallback<PhoneBook>() {
 
 class PhoneViewHolder(private val binding: PhoneItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
-    fun bind(phoneBook: PhoneBook,onItemClick: (phoneBook: PhoneBook) -> Unit) {
+    fun bind(phone: PhoneBook, onItemClick: (number: String) -> Unit) {
         binding.tvName.text = binding.root.context.getString(
             R.string.name,
-            phoneBook.name
+            phone.name
         )
         binding.tvPhone.text = binding.root.context.getString(
             R.string.phone,
-            phoneBook.phone
+            phone.phone
         )
         binding.tvType.text = binding.root.context.getString(
             R.string.type,
-            phoneBook.type
+            phone.type
         )
         this.itemView.setOnClickListener {
-            onItemClick(phoneBook)
+            onItemClick(phone.phone)
         }
     }
 }
