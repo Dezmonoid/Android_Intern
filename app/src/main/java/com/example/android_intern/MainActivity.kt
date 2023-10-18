@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setWeather() {
-        adapter.submitList(WeatherStore.get()?.list)
+        adapter.submitList(WeatherStore.get())
     }
 
     private fun setWeatherRecyclerView() {
@@ -51,11 +51,11 @@ class MainActivity : AppCompatActivity() {
                     response: Response<ForecastResponse>
                 ) {
                     if (response.isSuccessful) {
-                        val forecastGetList = response.body()!!
-                        WeatherStore.set(forecastGetList)
+                        val forecastList = response.body()?.list
+                        WeatherStore.set(forecastList)
                         Log.d(TAG, binding.root.context.getString(R.string.connected))
                         runOnUiThread {
-                            adapter.submitList(forecastGetList.list)
+                            adapter.submitList(forecastList)
                         }
                     } else {
                         Log.d(TAG, binding.root.context.getString(R.string.error_connected))
