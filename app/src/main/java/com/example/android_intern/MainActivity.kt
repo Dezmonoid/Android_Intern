@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
             initApiService()
             setWeatherRecyclerView()
         } else {
-            setWeather.submitList(WeatherStore.get()?.list)
+            setWeather.submitList(WeatherStore.get())
         }
     }
 
@@ -51,11 +51,11 @@ class MainActivity : AppCompatActivity() {
                     response: Response<ForecastResponse>
                 ) {
                     if (response.isSuccessful) {
-                        val forecastGetList = response.body()!!
-                        WeatherStore.set(forecastGetList)
+                        val forecastList = response.body()?.list
+                        WeatherStore.set(forecastList)
                         Log.d(TAG, binding.root.context.getString(R.string.connected))
                         runOnUiThread {
-                            setWeather.submitList(forecastGetList.list)
+                            setWeather.submitList(forecastList)
                         }
                     } else {
                         Log.d(TAG, binding.root.context.getString(R.string.error_connected))
@@ -82,10 +82,10 @@ class MainActivity : AppCompatActivity() {
     private fun retrofitBuild(): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
-        .client(initInterceptor())
+        .client(getInterceptorClient())
         .build()
 
-    private fun initInterceptor() = OkHttpClient.Builder()
+    private fun getInterceptorClient() = OkHttpClient.Builder()
         .addInterceptor(
             HttpLoggingInterceptor()
                 .setLevel(HttpLoggingInterceptor.Level.BASIC)
