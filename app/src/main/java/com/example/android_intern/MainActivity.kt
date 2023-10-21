@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         loadWeather { callback -> adapter.submitList(callback) }
     }
 
-    private fun loadWeather(callback: (List<ForecastResponse.Sky>?) -> Unit) {
+    private fun loadWeather(callback: (List<ForecastResponse.Sky>) -> Unit) {
         apiService.getCurrentForecastData(city_id = CITY_ID, app_id = APP_ID, units = UNITS)
             .enqueue(object : Callback<ForecastResponse> {
                 override fun onResponse(
@@ -39,7 +39,9 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         val forecastList = response.body()?.list
-                        callback(forecastList)
+                        if (forecastList != null) {
+                            callback(forecastList)
+                        }
                     }
                 }
 
