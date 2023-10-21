@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android_intern.databinding.PhoneItemBinding
 
-
 class PhoneAdapter(
     private val onItemClick: (number: String) -> Unit
 ) :
@@ -18,11 +17,9 @@ class PhoneAdapter(
     }
 
     override fun onBindViewHolder(holder: PhoneViewHolder, position: Int) {
-        holder.bind(getItem(position),onItemClick)
+        holder.bind(getItem(position), onItemClick)
 
     }
-
-
 }
 
 private class UserItemDiffCallback : DiffUtil.ItemCallback<PhoneBook>() {

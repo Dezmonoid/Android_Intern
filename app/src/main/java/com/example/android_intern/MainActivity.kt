@@ -1,6 +1,5 @@
 package com.example.android_intern
 
-
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_intern.databinding.ActivityMainBinding
 import com.google.gson.Gson
 
-
 private const val PREFERENCES_NAME = "filterSetting"
 private const val KEY_NAME = "filterText"
 private const val CALL = "tel:"
@@ -22,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var sharedPreference: SharedPreferences
     private val gson = Gson()
-    private val adapter = PhoneAdapter(){phoneBook -> callNumber(phoneBook) }
+    private val adapter = PhoneAdapter { phoneBook -> callNumber(phoneBook) }
     private lateinit var loadFilter: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

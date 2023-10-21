@@ -1,6 +1,6 @@
 package com.example.android_intern
 
-val phoneBookJson = """[{
+const val phoneBookJson = """[{
     "name": "(Приёмная)",
     "phone": "+375 (2239) 7-17-80",
     "type": ""
