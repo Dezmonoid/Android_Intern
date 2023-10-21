@@ -1,6 +1,5 @@
 package com.example.android_intern
 
-
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -28,10 +27,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         initApiService()
         initWeatherRecyclerView()
-        loadWeather()
+        loadWeather { callback -> adapter.submitList(callback) }
     }
 
-    private fun loadWeather() {
+    private fun loadWeather(callback: (List<ForecastResponse.Sky>?) -> Unit) {
         apiService.getCurrentForecastData(city_id = CITY_ID, app_id = APP_ID, units = UNITS)
             .enqueue(object : Callback<ForecastResponse> {
                 override fun onResponse(
@@ -40,14 +39,12 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         val forecastList = response.body()?.list
-                        runOnUiThread {
-                            adapter.submitList(forecastList)
-                        }
+                        callback(forecastList)
                     }
                 }
 
                 override fun onFailure(call: Call<ForecastResponse>, t: Throwable) {
-                    Log.e(TAG,t.message,t)
+                    Log.e(TAG, t.message, t)
                 }
             })
     }

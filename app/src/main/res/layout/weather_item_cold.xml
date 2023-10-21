@@ -31,7 +31,6 @@
         android:id="@+id/ivIcon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,6 +44,4 @@
         android:src="@drawable/cold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/tvTemperature" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

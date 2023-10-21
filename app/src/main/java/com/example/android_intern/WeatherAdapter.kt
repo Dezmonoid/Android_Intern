@@ -90,7 +90,6 @@ class WeatherColdViewHolder(private val binding: WeatherItemColdBinding) :
     }
 }
 
-
 class WeatherHotViewHolder(private val binding: WeatherItemHotBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(forecast: ForecastResponse.Sky) {
