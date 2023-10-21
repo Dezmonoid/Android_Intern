@@ -33,17 +33,20 @@ class MainActivity : AppCompatActivity() {
     private fun loadWeather() {
         if (WeatherStore.get() == null) {
             initApiService()
-            setWeatherRecyclerView()
+            firstLoad { callback ->
+                WeatherStore.set(callback)
+                adapter.submitList(callback)
+            }
         } else {
-            setWeather()
+            saveLoad()
         }
     }
 
-    private fun setWeather() {
+    private fun saveLoad() {
         adapter.submitList(WeatherStore.get())
     }
 
-    private fun setWeatherRecyclerView() {
+    private fun firstLoad(callback: (List<ForecastResponse.Sky>) -> Unit) {
         apiService.getCurrentForecastData(cityId = CITY_ID, appId = APP_ID, units = UNITS)
             .enqueue(object : Callback<ForecastResponse> {
                 override fun onResponse(
@@ -51,12 +54,8 @@ class MainActivity : AppCompatActivity() {
                     response: Response<ForecastResponse>
                 ) {
                     if (response.isSuccessful) {
-                        val forecastList = response.body()?.list
-                        WeatherStore.set(forecastList)
                         Log.d(TAG, binding.root.context.getString(R.string.connected))
-                        runOnUiThread {
-                            adapter.submitList(forecastList)
-                        }
+                        response.body()?.list?.let { callback(it) }
                     } else {
                         Log.d(TAG, binding.root.context.getString(R.string.error_connected))
                     }
