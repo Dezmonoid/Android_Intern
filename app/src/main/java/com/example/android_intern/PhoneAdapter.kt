@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android_intern.databinding.PhoneItemBinding
 
-
 class PhoneAdapter(
     private val onItemClick: (phoneBook: PhoneBook) -> Unit
 ) :
@@ -20,7 +19,6 @@ class PhoneAdapter(
     override fun onBindViewHolder(holder: PhoneViewHolder, position: Int) {
         holder.bind(getItem(position), onItemClick)
     }
-
 }
 
 private class UserItemDiffCallback : DiffUtil.ItemCallback<PhoneBook>() {
@@ -31,7 +29,7 @@ private class UserItemDiffCallback : DiffUtil.ItemCallback<PhoneBook>() {
         oldItem == newItem
 }
 
-class PhoneViewHolder(val binding: PhoneItemBinding) :
+class PhoneViewHolder(private val binding: PhoneItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(phoneBook: PhoneBook, onItemClick: (phoneBook: PhoneBook) -> Unit) {
         binding.tvName.text = binding.root.context.getString(

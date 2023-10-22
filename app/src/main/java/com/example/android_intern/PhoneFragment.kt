@@ -16,25 +16,25 @@ import com.example.android_intern.databinding.PhoneFragmentBinding
 private const val CALL = "tel:"
 
 class PhoneFragment : Fragment() {
-
-    private lateinit var binding: PhoneFragmentBinding
-    private var phoneAdapter = PhoneAdapter() { phoneBook -> callNumber(phoneBook) }
+    private var _binding: PhoneFragmentBinding? = null
+    private val binding get() = _binding!!
+    private var phoneAdapter = PhoneAdapter { phoneBook -> callNumber(phoneBook) }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = PhoneFragmentBinding.inflate(inflater)
+        _binding = PhoneFragmentBinding.inflate(inflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
-        setPhoneBook()
+        viewPhoneBook()
         setListeners()
     }
 
-    private fun setPhoneBook() {
+    private fun viewPhoneBook() {
         phoneAdapter.submitList(getInitNumbers())
     }
 
@@ -61,4 +61,8 @@ class PhoneFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

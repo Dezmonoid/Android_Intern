@@ -19,7 +19,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:hint="@string/et_text" />
-
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.fragment.app.FragmentContainerView

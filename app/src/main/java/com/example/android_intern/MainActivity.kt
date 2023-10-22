@@ -1,6 +1,5 @@
 package com.example.android_intern
 
-
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.android_intern.databinding.ActivityMainBinding
@@ -16,5 +15,4 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.phoneFragment, PhoneFragment())
             .commit()
     }
-
 }
