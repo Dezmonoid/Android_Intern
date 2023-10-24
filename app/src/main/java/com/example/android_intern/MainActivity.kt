@@ -27,10 +27,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         initApiService()
         initWeatherRecyclerView()
-        loadWeather { callback -> adapter.submitList(callback) }
+        loadWeather()
     }
 
-    private fun loadWeather(callback: (List<ForecastResponse.Sky>) -> Unit) {
+    private fun loadWeather() {
         apiService.getCurrentForecastData(city_id = CITY_ID, app_id = APP_ID, units = UNITS)
             .enqueue(object : Callback<ForecastResponse> {
                 override fun onResponse(
@@ -39,9 +39,7 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         val forecastList = response.body()?.list
-                        if (forecastList != null) {
-                            callback(forecastList)
-                        }
+                        adapter.submitList(forecastList)
                     }
                 }
 
