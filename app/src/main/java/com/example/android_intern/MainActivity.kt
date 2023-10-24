@@ -31,22 +31,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadWeather() {
-        if (WeatherStore.get() == null) {
+        if (WeatherStore.get().isEmpty()) {
             initApiService()
-            firstLoad { callback ->
-                WeatherStore.set(callback)
-                adapter.submitList(callback)
-            }
+            firstLoad()
         } else {
-            saveLoad()
+            loadingSaveWeather()
         }
     }
 
-    private fun saveLoad() {
+    private fun loadingSaveWeather() {
         adapter.submitList(WeatherStore.get())
     }
 
-    private fun firstLoad(callback: (List<ForecastResponse.Sky>) -> Unit) {
+    private fun firstLoad() {
         apiService.getCurrentForecastData(cityId = CITY_ID, appId = APP_ID, units = UNITS)
             .enqueue(object : Callback<ForecastResponse> {
                 override fun onResponse(
@@ -55,7 +52,9 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         Log.d(TAG, binding.root.context.getString(R.string.connected))
-                        response.body()?.list?.let { callback(it) }
+                        val forecastList = response.body()?.list.orEmpty()
+                        WeatherStore.set(forecastList)
+                        adapter.submitList(forecastList)
                     } else {
                         Log.d(TAG, binding.root.context.getString(R.string.error_connected))
                     }
