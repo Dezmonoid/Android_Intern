@@ -9,7 +9,6 @@ import com.bumptech.glide.Glide
 import com.example.android_intern.Character
 import com.example.android_intern.databinding.CharacterItemBinding
 
-
 class CharacterAdapter(
     private val onItemClick: (character: Character.Result) -> Unit
 ) :

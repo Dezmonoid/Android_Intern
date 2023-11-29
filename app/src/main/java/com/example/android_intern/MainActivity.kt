@@ -1,12 +1,10 @@
 package com.example.android_intern
 
-
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.android_intern.databinding.ActivityMainBinding
 import com.example.android_intern.fragment.CharacterFragment
-
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

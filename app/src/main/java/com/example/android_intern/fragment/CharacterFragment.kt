@@ -20,13 +20,13 @@ import retrofit2.Response
 
 const val PREFIX = "https://rickandmortyapi.com/api/episode/"
 const val TAG = "Debug"
-class CharacterFragment(val activity:Activity) : Fragment() {
 
+class CharacterFragment() : Fragment() {
     private lateinit var binding: CharacterFragmentBinding
     private val adapter = CharacterAdapter { character ->
-        (context as MainActivity).changeFragment(EpisodeFragment(character.episode?.map{
+        (context as MainActivity).changeFragment(EpisodeFragment(character.episode?.map {
             it?.removePrefix(PREFIX)
-        }?.joinToString(",","","") ?:""))
+        }?.joinToString(",", "", "") ?: ""))
     }
 
     override fun onCreateView(
@@ -54,9 +54,7 @@ class CharacterFragment(val activity:Activity) : Fragment() {
                     if (response.isSuccessful) {
                         val characterList = response.body()
                         Log.d(TAG, binding.root.context.getString(R.string.connected))
-                        activity.runOnUiThread {
                             adapter.submitList(characterList?.results)
-                        }
                     } else {
                         Log.d(TAG, binding.root.context.getString(R.string.error_connected))
                     }
@@ -67,7 +65,6 @@ class CharacterFragment(val activity:Activity) : Fragment() {
                 }
             })
     }
-
 
     private fun initCharacterRecyclerView() {
         binding.characterRecyclerView.layoutManager = LinearLayoutManager(binding.root.context)

@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_intern.Episode
 import com.example.android_intern.databinding.EpisodeItemBinding
 
-
 class EpisodeAdapter : ListAdapter<Episode.EpisodeItem, EpisodeViewHolder>(EpisodeDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EpisodeViewHolder {
         val binding =
@@ -22,10 +21,16 @@ class EpisodeAdapter : ListAdapter<Episode.EpisodeItem, EpisodeViewHolder>(Episo
 }
 
 private class EpisodeDiffCallback : DiffUtil.ItemCallback<Episode.EpisodeItem>() {
-    override fun areItemsTheSame(oldItem: Episode.EpisodeItem, newItem: Episode.EpisodeItem): Boolean =
+    override fun areItemsTheSame(
+        oldItem: Episode.EpisodeItem,
+        newItem: Episode.EpisodeItem
+    ): Boolean =
         oldItem == newItem
 
-    override fun areContentsTheSame(oldItem: Episode.EpisodeItem, newItem: Episode.EpisodeItem): Boolean =
+    override fun areContentsTheSame(
+        oldItem: Episode.EpisodeItem,
+        newItem: Episode.EpisodeItem
+    ): Boolean =
         oldItem == newItem
 }
 

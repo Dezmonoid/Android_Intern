@@ -1,6 +1,4 @@
 package com.example.android_intern.fragment
-
-import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,10 +15,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class EpisodeFragment(var episode: String) : Fragment() {
+class EpisodeFragment(private var episode: String) : Fragment() {
     private lateinit var binding: EpisodeFragmentBinding
     private val adapter = EpisodeAdapter()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,9 +43,7 @@ class EpisodeFragment(var episode: String) : Fragment() {
                     if (response.isSuccessful) {
                         val episodeList = response.body()
                         Log.d(TAG, binding.root.context.getString(R.string.connected))
-                        activity?.runOnUiThread {
                             adapter.submitList(episodeList)
-                        }
                     } else {
                         Log.d(TAG, binding.root.context.getString(R.string.error_connected))
                     }
