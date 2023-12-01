@@ -1,6 +1,5 @@
 package com.example.android_intern.fragment
 
-import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -21,8 +20,9 @@ import retrofit2.Response
 const val PREFIX = "https://rickandmortyapi.com/api/episode/"
 const val TAG = "Debug"
 
-class CharacterFragment() : Fragment() {
-    private lateinit var binding: CharacterFragmentBinding
+class CharacterFragment : Fragment() {
+    private var _binding: CharacterFragmentBinding? = null
+    private val binding get() = _binding!!
     private val adapter = CharacterAdapter { character ->
         (context as MainActivity).changeFragment(EpisodeFragment(character.episode?.map {
             it?.removePrefix(PREFIX)
@@ -34,7 +34,7 @@ class CharacterFragment() : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = CharacterFragmentBinding.inflate(inflater)
+        _binding = CharacterFragmentBinding.inflate(inflater)
         return binding.root
     }
 
@@ -54,7 +54,7 @@ class CharacterFragment() : Fragment() {
                     if (response.isSuccessful) {
                         val characterList = response.body()
                         Log.d(TAG, binding.root.context.getString(R.string.connected))
-                            adapter.submitList(characterList?.results)
+                        adapter.submitList(characterList?.results)
                     } else {
                         Log.d(TAG, binding.root.context.getString(R.string.error_connected))
                     }
@@ -69,5 +69,10 @@ class CharacterFragment() : Fragment() {
     private fun initCharacterRecyclerView() {
         binding.characterRecyclerView.layoutManager = LinearLayoutManager(binding.root.context)
         binding.characterRecyclerView.adapter = adapter
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

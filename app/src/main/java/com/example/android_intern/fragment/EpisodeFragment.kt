@@ -1,4 +1,5 @@
 package com.example.android_intern.fragment
+
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,14 +17,15 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class EpisodeFragment(private var episode: String) : Fragment() {
-    private lateinit var binding: EpisodeFragmentBinding
+    private var _binding: EpisodeFragmentBinding? = null
+    private val binding get() = _binding!!
     private val adapter = EpisodeAdapter()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = EpisodeFragmentBinding.inflate(inflater)
+        _binding = EpisodeFragmentBinding.inflate(inflater)
         return binding.root
     }
 
@@ -43,7 +45,7 @@ class EpisodeFragment(private var episode: String) : Fragment() {
                     if (response.isSuccessful) {
                         val episodeList = response.body()
                         Log.d(TAG, binding.root.context.getString(R.string.connected))
-                            adapter.submitList(episodeList)
+                        adapter.submitList(episodeList)
                     } else {
                         Log.d(TAG, binding.root.context.getString(R.string.error_connected))
                     }
@@ -60,4 +62,8 @@ class EpisodeFragment(private var episode: String) : Fragment() {
         binding.episodeRecyclerView.adapter = adapter
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
