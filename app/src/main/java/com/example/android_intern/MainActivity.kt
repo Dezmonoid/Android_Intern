@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         val forecastList = response.body()?.list
-                        adapter.submitList(forecastList)
+                        adapter.submitList(forecastList.orEmpty())
                     }
                 }
 
