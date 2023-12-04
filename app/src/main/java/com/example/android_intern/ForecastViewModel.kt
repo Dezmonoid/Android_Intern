@@ -8,6 +8,11 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+private const val APP_ID = "eeba719e0ea1ed0d70d6ea433307695e"
+private const val UNITS = "metric"
+private const val CITY_ID = "622034"
+private const val TAG = "Debug"
+
 class ForecastViewModel : ViewModel() {
     private val _liveData = MutableLiveData<List<ForecastResponse.Sky>>()
     val liveData: LiveData<List<ForecastResponse.Sky>>
@@ -24,8 +29,8 @@ class ForecastViewModel : ViewModel() {
                     call: Call<ForecastResponse>,
                     response: Response<ForecastResponse>
                 ) {
-                    val forecastList = response.body()?.list.orEmpty()
-                    _liveData.value = forecastList
+                    val forecasts = response.body()?.list.orEmpty()
+                    _liveData.value = forecasts
                 }
 
                 override fun onFailure(call: Call<ForecastResponse>, t: Throwable) {

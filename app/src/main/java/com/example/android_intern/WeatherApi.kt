@@ -7,6 +7,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
+
 interface WeatherApi {
     companion object {
         fun create(): WeatherApi {

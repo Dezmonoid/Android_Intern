@@ -7,12 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_intern.databinding.ActivityMainBinding
 
-const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
-const val APP_ID = "eeba719e0ea1ed0d70d6ea433307695e"
-const val UNITS = "metric"
-const val CITY_ID = "622034"
-const val TAG = "Debug"
-
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val adapter = WeatherAdapter()
