@@ -11,11 +11,11 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
-const val APP_ID = "eeba719e0ea1ed0d70d6ea433307695e"
-const val UNITS = "metric"
-const val CITY_ID = "622034"
-const val TAG = "Error"
+private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
+private const val APP_ID = "eeba719e0ea1ed0d70d6ea433307695e"
+private const val UNITS = "metric"
+private const val CITY_ID = "622034"
+private const val TAG = "Error"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -38,8 +38,8 @@ class MainActivity : AppCompatActivity() {
                     response: Response<ForecastResponse>
                 ) {
                     if (response.isSuccessful) {
-                        val forecastList = response.body()?.list
-                        adapter.submitList(forecastList.orEmpty())
+                        val forecasts = response.body()?.list.orEmpty()
+                        adapter.submitList(forecasts)
                     }
                 }
 

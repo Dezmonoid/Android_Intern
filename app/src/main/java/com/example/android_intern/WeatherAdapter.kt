@@ -67,23 +67,24 @@ class WeatherAdapter() :
 
 class WeatherColdViewHolder(private val binding: WeatherItemColdBinding) :
     RecyclerView.ViewHolder(binding.root) {
+    private val context = binding.root.context
     fun bind(forecast: ForecastResponse.Sky) {
-        binding.tvDateTime.text = binding.root.context.getString(
+        binding.tvDateTime.text = context.getString(
             R.string.date,
             forecast.dtTxt
         )
-        binding.tvTemperature.text = binding.root.context.getString(
+        binding.tvTemperature.text = context.getString(
             R.string.temperature,
-            DecimalFormat(binding.root.context.getString(R.string.format)).format(
+            DecimalFormat(context.getString(R.string.format)).format(
                 forecast.main?.temp
             )
         )
         Glide
             .with(itemView)
             .load(
-                binding.root.context.getString(
+                context.getString(
                     R.string.icon_url,
-                    forecast.weather?.get(0)?.icon
+                    forecast.weather?.first()?.icon
                 )
             )
             .into(binding.ivIcon)
@@ -92,14 +93,15 @@ class WeatherColdViewHolder(private val binding: WeatherItemColdBinding) :
 
 class WeatherHotViewHolder(private val binding: WeatherItemHotBinding) :
     RecyclerView.ViewHolder(binding.root) {
+    private val context = binding.root.context
     fun bind(forecast: ForecastResponse.Sky) {
-        binding.tvDateTime.text = binding.root.context.getString(
+        binding.tvDateTime.text = context.getString(
             R.string.date,
             forecast.dtTxt
         )
-        binding.tvTemperature.text = binding.root.context.getString(
+        binding.tvTemperature.text = context.getString(
             R.string.temperature,
-            DecimalFormat(binding.root.context.getString(R.string.format)).format(
+            DecimalFormat(context.getString(R.string.format)).format(
                 forecast.main?.temp
             )
         )
