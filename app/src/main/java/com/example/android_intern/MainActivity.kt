@@ -8,11 +8,16 @@ import com.example.android_intern.fragment.CharacterFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private var firstLaunch = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        changeFragment(CharacterFragment())
+        if (firstLaunch) {
+            changeFragment(CharacterFragment())
+            firstLaunch = false
+        }
+
     }
 
     fun changeFragment(fragment: Fragment) {

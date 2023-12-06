@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_intern.App
-import com.example.android_intern.Episode
+import com.example.android_intern.Episodes
 import com.example.android_intern.R
 import com.example.android_intern.adapter.EpisodeAdapter
 import com.example.android_intern.databinding.EpisodeFragmentBinding
@@ -37,10 +37,10 @@ class EpisodeFragment(private var episode: String) : Fragment() {
 
     private fun loadEpisode() {
         App.apiService.getEpisode(episode)
-            .enqueue(object : Callback<Episode> {
+            .enqueue(object : Callback<Episodes> {
                 override fun onResponse(
-                    call: Call<Episode>,
-                    response: Response<Episode>
+                    call: Call<Episodes>,
+                    response: Response<Episodes>
                 ) {
                     if (response.isSuccessful) {
                         val episodeList = response.body()
@@ -51,7 +51,7 @@ class EpisodeFragment(private var episode: String) : Fragment() {
                     }
                 }
 
-                override fun onFailure(call: Call<Episode>, t: Throwable) {
+                override fun onFailure(call: Call<Episodes>, t: Throwable) {
                     Log.e(TAG, t.message, t)
                 }
             })

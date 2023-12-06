@@ -10,6 +10,10 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        apiService = RickAndMortyApi.initApiService()
+        setApiService()
+    }
+
+    private fun setApiService() {
+        apiService = RickAndMortyApi.createApiService()
     }
 }

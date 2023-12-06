@@ -9,9 +9,9 @@
 
     <ImageView
         android:id="@+id/imageCharacter"
-        android:layout_width="100sp"
-        android:layout_height="100sp"
-        android:layout_margin="2sp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -20,7 +20,7 @@
         android:id="@+id/typeCharacter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20sp"
+        android:layout_marginStart="20dp"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@id/genderCharacter"
         app:layout_constraintStart_toEndOf="@id/imageCharacter"
@@ -30,7 +30,7 @@
         android:id="@+id/genderCharacter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20sp"
+        android:layout_marginStart="20dp"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/imageCharacter"

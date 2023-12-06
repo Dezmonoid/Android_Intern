@@ -20,7 +20,7 @@ import retrofit2.Response
 const val PREFIX = "https://rickandmortyapi.com/api/episode/"
 const val TAG = "Debug"
 
-class CharacterFragment : Fragment() {
+class CharacterFragment :Fragment(){
     private var _binding: CharacterFragmentBinding? = null
     private val binding get() = _binding!!
     private val adapter = CharacterAdapter { character ->
@@ -34,6 +34,7 @@ class CharacterFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.e("Test","1")
         _binding = CharacterFragmentBinding.inflate(inflater)
         return binding.root
     }
@@ -42,6 +43,7 @@ class CharacterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initCharacterRecyclerView()
         loadCharacter()
+        Log.e("Test","2")
     }
 
     private fun loadCharacter() {
@@ -74,5 +76,7 @@ class CharacterFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+
+        Log.e("Test","3")
     }
 }
