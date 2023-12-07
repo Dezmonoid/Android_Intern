@@ -8,25 +8,30 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_intern.App.Companion.apiService
-import com.example.android_intern.Character
+import com.example.android_intern.Characters
 import com.example.android_intern.MainActivity
 import com.example.android_intern.R
-import com.example.android_intern.adapter.CharacterAdapter
+import com.example.android_intern.adapter.CharactersAdapter
 import com.example.android_intern.databinding.CharacterFragmentBinding
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 const val PREFIX = "https://rickandmortyapi.com/api/episode/"
 const val TAG = "Debug"
+const val SAVED_TAG_CHARACTERS = "Characters"
 
-class CharacterFragment :Fragment(){
+class CharactersFragment : Fragment() {
     private var _binding: CharacterFragmentBinding? = null
     private val binding get() = _binding!!
-    private val adapter = CharacterAdapter { character ->
-        (context as MainActivity).changeFragment(EpisodeFragment(character.episode?.map {
+    private val gson = Gson()
+    private val adapter = CharactersAdapter { character ->
+        EpisodesFragment.episode = character.episode?.map {
             it?.removePrefix(PREFIX)
-        }?.joinToString(",", "", "") ?: ""))
+        }?.joinToString(",", "", "") ?: ""
+        (context as MainActivity).setFragment(EpisodesFragment())
     }
 
     override fun onCreateView(
@@ -34,7 +39,6 @@ class CharacterFragment :Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.e("Test","1")
         _binding = CharacterFragmentBinding.inflate(inflater)
         return binding.root
     }
@@ -42,16 +46,35 @@ class CharacterFragment :Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initCharacterRecyclerView()
-        loadCharacter()
-        Log.e("Test","2")
+        loadCharacters(savedInstanceState)
     }
 
-    private fun loadCharacter() {
-        apiService.getCharacter()
-            .enqueue(object : Callback<Character> {
+    private fun loadCharacters(savedInstanceState: Bundle?) {
+        if (savedInstanceState == null) {
+            getCalledCharacters()
+        } else {
+            getSavedCharacters(savedInstanceState)
+        }
+    }
+
+    private fun getSavedCharacters(bundle: Bundle) {
+        val json = bundle.getString(SAVED_TAG_CHARACTERS).toString()
+        val typeToken = object : TypeToken<List<Characters.Result>>() {}.type
+        adapter.submitList(gson.fromJson(json, typeToken))
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val json = gson.toJson(adapter.currentList)
+        outState.putString(SAVED_TAG_CHARACTERS, json)
+    }
+
+    private fun getCalledCharacters() {
+        apiService.getCharacters()
+            .enqueue(object : Callback<Characters> {
                 override fun onResponse(
-                    call: Call<Character>,
-                    response: Response<Character>
+                    call: Call<Characters>,
+                    response: Response<Characters>
                 ) {
                     if (response.isSuccessful) {
                         val characterList = response.body()
@@ -62,7 +85,7 @@ class CharacterFragment :Fragment(){
                     }
                 }
 
-                override fun onFailure(call: Call<Character>, t: Throwable) {
+                override fun onFailure(call: Call<Characters>, t: Throwable) {
                     Log.e(TAG, t.message, t)
                 }
             })
@@ -76,7 +99,5 @@ class CharacterFragment :Fragment(){
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-
-        Log.e("Test","3")
     }
 }

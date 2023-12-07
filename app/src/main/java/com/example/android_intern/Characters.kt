@@ -3,7 +3,7 @@ package com.example.android_intern
 
 import com.google.gson.annotations.SerializedName
 
-data class Character(
+data class Characters(
     @SerializedName("info")
     val info: Info?,
     @SerializedName("results")

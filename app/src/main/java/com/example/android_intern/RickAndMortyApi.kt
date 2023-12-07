@@ -20,7 +20,7 @@ interface RickAndMortyApi {
     }
 
     @GET("character?")
-    fun getCharacter(): Call<Character>
+    fun getCharacters(): Call<Characters>
 
     @GET("episode/{id}")
     fun getEpisode(

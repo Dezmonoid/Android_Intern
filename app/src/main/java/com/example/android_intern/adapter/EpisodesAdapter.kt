@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android_intern.Episodes
 import com.example.android_intern.databinding.EpisodeItemBinding
 
-class EpisodeAdapter : ListAdapter<Episodes.EpisodeItem, EpisodeViewHolder>(EpisodeDiffCallback()) {
+class EpisodesAdapter : ListAdapter<Episodes.EpisodeItem, EpisodeViewHolder>(EpisodeDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EpisodeViewHolder {
         val binding =
             EpisodeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)

@@ -10,16 +10,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_intern.App
 import com.example.android_intern.Episodes
 import com.example.android_intern.R
-import com.example.android_intern.adapter.EpisodeAdapter
+import com.example.android_intern.adapter.EpisodesAdapter
 import com.example.android_intern.databinding.EpisodeFragmentBinding
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class EpisodeFragment(private var episode: String) : Fragment() {
+const val SAVED_TAG_EPISODES = "Episodes"
+
+class EpisodesFragment : Fragment() {
+    companion object{
+        var episode: String = ""
+    }
     private var _binding: EpisodeFragmentBinding? = null
     private val binding get() = _binding!!
-    private val adapter = EpisodeAdapter()
+    private val gson = Gson()
+    private val adapter = EpisodesAdapter()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,10 +40,30 @@ class EpisodeFragment(private var episode: String) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initCharacterRecyclerView()
-        loadEpisode()
+        getCallEpisodes(savedInstanceState)
     }
 
-    private fun loadEpisode() {
+    private fun getCallEpisodes(savedInstanceState: Bundle?) {
+        if (savedInstanceState == null) {
+            getCallEpisodes()
+        } else {
+            getSavedEpisodes(savedInstanceState)
+        }
+    }
+
+    private fun getSavedEpisodes(bundle: Bundle) {
+        val json = bundle.getString(SAVED_TAG_EPISODES).toString()
+        val typeToken = object : TypeToken<List<Episodes.EpisodeItem>>() {}.type
+        adapter.submitList(gson.fromJson(json, typeToken))
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val json = gson.toJson(adapter.currentList)
+        outState.putString(SAVED_TAG_EPISODES, json)
+    }
+
+    private fun getCallEpisodes() {
         App.apiService.getEpisode(episode)
             .enqueue(object : Callback<Episodes> {
                 override fun onResponse(

@@ -4,26 +4,23 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.android_intern.databinding.ActivityMainBinding
-import com.example.android_intern.fragment.CharacterFragment
+import com.example.android_intern.fragment.CharactersFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private var firstLaunch = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        if (firstLaunch) {
-            changeFragment(CharacterFragment())
-            firstLaunch = false
+        if (savedInstanceState == null) {
+            setFragment(CharactersFragment())
         }
-
     }
 
-    fun changeFragment(fragment: Fragment) {
+    fun setFragment(value: Fragment) {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragmentContainer, fragment)
+            .replace(R.id.fragmentContainer, value)
             .commit()
     }
 }
