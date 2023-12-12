@@ -1,6 +1,5 @@
 package com.example.android_intern
 
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -20,10 +19,10 @@ interface RickAndMortyApi {
     }
 
     @GET("character?")
-    fun getCharacters(): Call<Characters>
+    suspend fun getCharacters(): Characters
 
     @GET("episode/{id}")
-    fun getEpisode(
+    suspend fun getEpisode(
         @Path("id") postId: String
-    ): Call<Episodes>
+    ): Episodes
 }

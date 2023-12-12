@@ -6,28 +6,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_intern.App
+import com.example.android_intern.App.Companion.apiService
 import com.example.android_intern.Episodes
 import com.example.android_intern.R
 import com.example.android_intern.adapter.EpisodesAdapter
 import com.example.android_intern.databinding.EpisodeFragmentBinding
+import com.example.android_intern.viewModel.CharactersViewModel
+import com.example.android_intern.viewModel.EpisodesViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
-const val SAVED_TAG_EPISODES = "Episodes"
+import retrofit2.await
 
 class EpisodesFragment : Fragment() {
-    companion object{
-        var episode: String = ""
-    }
+
+
     private var _binding: EpisodeFragmentBinding? = null
     private val binding get() = _binding!!
-    private val gson = Gson()
     private val adapter = EpisodesAdapter()
+    private val viewModel by viewModels<EpisodesViewModel>()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,50 +45,15 @@ class EpisodesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initCharacterRecyclerView()
-        getCallEpisodes(savedInstanceState)
+        observeLiveData()
     }
 
-    private fun getCallEpisodes(savedInstanceState: Bundle?) {
-        if (savedInstanceState == null) {
-            getCallEpisodes()
-        } else {
-            getSavedEpisodes(savedInstanceState)
+    private fun observeLiveData() {
+        viewModel.liveData.observe(viewLifecycleOwner) { episodes ->
+            adapter.submitList(episodes)
         }
     }
 
-    private fun getSavedEpisodes(bundle: Bundle) {
-        val json = bundle.getString(SAVED_TAG_EPISODES).toString()
-        val typeToken = object : TypeToken<List<Episodes.EpisodeItem>>() {}.type
-        adapter.submitList(gson.fromJson(json, typeToken))
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        val json = gson.toJson(adapter.currentList)
-        outState.putString(SAVED_TAG_EPISODES, json)
-    }
-
-    private fun getCallEpisodes() {
-        App.apiService.getEpisode(episode)
-            .enqueue(object : Callback<Episodes> {
-                override fun onResponse(
-                    call: Call<Episodes>,
-                    response: Response<Episodes>
-                ) {
-                    if (response.isSuccessful) {
-                        val episodeList = response.body()
-                        Log.d(TAG, binding.root.context.getString(R.string.connected))
-                        adapter.submitList(episodeList)
-                    } else {
-                        Log.d(TAG, binding.root.context.getString(R.string.error_connected))
-                    }
-                }
-
-                override fun onFailure(call: Call<Episodes>, t: Throwable) {
-                    Log.e(TAG, t.message, t)
-                }
-            })
-    }
 
     private fun initCharacterRecyclerView() {
         binding.episodeRecyclerView.layoutManager = LinearLayoutManager(binding.root.context)
