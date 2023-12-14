@@ -3,7 +3,8 @@ package com.example.android_intern
 
 import com.google.gson.annotations.SerializedName
 
-class Episodes : ArrayList<Episodes.EpisodeItem>(){
+class Episodes : ArrayList<Episodes.EpisodeItem>()
+{
     data class EpisodeItem(
         @SerializedName("air_date")
         val airDate: String?,
@@ -21,3 +22,4 @@ class Episodes : ArrayList<Episodes.EpisodeItem>(){
         val url: String?
     )
 }
+

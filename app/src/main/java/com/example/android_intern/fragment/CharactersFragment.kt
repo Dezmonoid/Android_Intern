@@ -30,7 +30,7 @@ class CharactersFragment : Fragment() {
     private val adapter = CharactersAdapter { character ->
         EpisodesFragment.episode = character.episode?.map {
             it?.removePrefix(PREFIX)
-        }?.joinToString(",", "", "") ?: ""
+        }?.joinToString() ?: ""
         (context as MainActivity).setFragment(EpisodesFragment())
     }
 
