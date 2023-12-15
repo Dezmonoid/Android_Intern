@@ -2,6 +2,7 @@ package com.example.android_intern
 
 
 import com.google.gson.annotations.SerializedName
+import java.util.ArrayList
 
 class Episodes : ArrayList<Episodes.EpisodeItem>(){
     data class EpisodeItem(

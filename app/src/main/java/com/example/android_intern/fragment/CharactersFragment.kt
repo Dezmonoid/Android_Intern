@@ -1,6 +1,7 @@
 package com.example.android_intern.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +13,7 @@ import com.example.android_intern.adapter.CharactersAdapter
 import com.example.android_intern.databinding.CharacterFragmentBinding
 import com.example.android_intern.viewModel.CharactersViewModel
 import com.example.android_intern.viewModel.EpisodesViewModel
-
-const val PREFIX = "https://rickandmortyapi.com/api/episode/"
+import com.example.android_intern.viewModel.PREFIX
 
 class CharactersFragment : Fragment() {
     private var _binding: CharacterFragmentBinding? = null
@@ -21,7 +21,9 @@ class CharactersFragment : Fragment() {
     private val adapter = CharactersAdapter { character ->
         EpisodesViewModel.episode = character.episode?.map {
             it?.removePrefix(PREFIX)
-        }?.joinToString(",", "", "") ?: ""
+        }?.joinToString() ?: ""
+        Log.e("Episode", character.id.toString())
+        Log.e("Episode", EpisodesViewModel.episode)
         (context as MainActivity).setFragment(EpisodesFragment())
     }
     private val viewModel by viewModels<CharactersViewModel>()
@@ -39,6 +41,9 @@ class CharactersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initCharacterRecyclerView()
         observeLiveData()
+        binding.btnNext.setOnClickListener {
+            viewModel.nextPage()
+        }
     }
 
     private fun observeLiveData() {
