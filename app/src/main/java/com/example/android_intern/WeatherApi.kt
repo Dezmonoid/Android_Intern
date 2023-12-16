@@ -21,9 +21,9 @@ interface WeatherApi {
     }
 
     @GET("forecast?")
-    fun getCurrentForecastData(
+    suspend fun getCurrentForecastData(
         @Query("id") cityId: String,
         @Query("APPID") appId: String,
         @Query("units") units: String
-    ): Call<ForecastResponse>
+    ): ForecastResponse
 }

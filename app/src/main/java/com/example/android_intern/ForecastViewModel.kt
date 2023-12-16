@@ -25,8 +25,8 @@ class ForecastViewModel : ViewModel() {
                 cityId = CITY_ID,
                 appId = APP_ID,
                 units = UNITS
-            ).execute().body()?.list.orEmpty()
-            _liveData.value = forecasts
+            )
+            _liveData.value = forecasts.list.orEmpty()
         }
     }
 }
