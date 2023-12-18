@@ -41,7 +41,7 @@ data class ForecastResponse(
         )
     }
 
-    data class Sky (
+    data class Sky(
         @SerializedName("clouds")
         val clouds: Clouds?,
         @SerializedName("dt")
