@@ -25,5 +25,5 @@ interface RickAndMortyApi {
     @GET("episode/{id}")
     fun getEpisode(
         @Path("id") postId: String
-    ): Call<Episodes>
+    ): Call<List<Episode>>
 }

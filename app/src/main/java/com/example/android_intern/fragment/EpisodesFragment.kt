@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_intern.App
-import com.example.android_intern.Episodes
+import com.example.android_intern.Episode
 import com.example.android_intern.R
 import com.example.android_intern.adapter.EpisodesAdapter
 import com.example.android_intern.databinding.EpisodeFragmentBinding
@@ -21,9 +21,10 @@ import retrofit2.Response
 const val SAVED_TAG_EPISODES = "Episodes"
 
 class EpisodesFragment : Fragment() {
-    companion object{
+    companion object {
         var episode: String = ""
     }
+
     private var _binding: EpisodeFragmentBinding? = null
     private val binding get() = _binding!!
     private val gson = Gson()
@@ -53,7 +54,7 @@ class EpisodesFragment : Fragment() {
 
     private fun getSavedEpisodes(bundle: Bundle) {
         val json = bundle.getString(SAVED_TAG_EPISODES).toString()
-        val typeToken = object : TypeToken<List<Episodes.EpisodeItem>>() {}.type
+        val typeToken = object : TypeToken<List<Episode>>() {}.type
         adapter.submitList(gson.fromJson(json, typeToken))
     }
 
@@ -65,10 +66,10 @@ class EpisodesFragment : Fragment() {
 
     private fun getCallEpisodes() {
         App.apiService.getEpisode(episode)
-            .enqueue(object : Callback<Episodes> {
+            .enqueue(object : Callback<List<Episode>> {
                 override fun onResponse(
-                    call: Call<Episodes>,
-                    response: Response<Episodes>
+                    call: Call<List<Episode>>,
+                    response: Response<List<Episode>>
                 ) {
                     if (response.isSuccessful) {
                         val episodeList = response.body()
@@ -79,7 +80,7 @@ class EpisodesFragment : Fragment() {
                     }
                 }
 
-                override fun onFailure(call: Call<Episodes>, t: Throwable) {
+                override fun onFailure(call: Call<List<Episode>>, t: Throwable) {
                     Log.e(TAG, t.message, t)
                 }
             })
