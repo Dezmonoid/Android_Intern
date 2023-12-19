@@ -40,5 +40,5 @@ interface RickAndMortyApi {
     @GET("episode/{id}")
     suspend fun getEpisode(
         @Path("id") Ids: String
-    ): Episodes
+    ): List<Episode>
 }
