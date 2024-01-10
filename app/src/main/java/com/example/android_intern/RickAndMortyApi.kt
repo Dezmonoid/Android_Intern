@@ -8,7 +8,6 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-
 private const val BASE_URL = "https://rickandmortyapi.com/api/"
 
 interface RickAndMortyApi {
@@ -41,4 +40,9 @@ interface RickAndMortyApi {
     suspend fun getEpisode(
         @Path("id") Ids: String
     ): List<Episode>
+
+    @GET("episode/{id}")
+    suspend fun getOneEpisode(
+        @Path("id") Ids: String
+    ): Episode
 }

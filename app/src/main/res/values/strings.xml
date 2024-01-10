@@ -7,4 +7,6 @@
     <string name="connected">Подключение успешно</string>
     <string name="error_connected">Ошибка подключения</string>
     <string name="btn_name">Next</string>
+    <string name="error_type">Ошибка, неизвестный тип</string>
+    <string name="unknown_error">Ошибка? Как ты сюда попал?</string>
 </resources>

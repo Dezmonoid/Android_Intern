@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.android_intern.CharacterInterface
 import com.example.android_intern.MainActivity
 import com.example.android_intern.adapter.CharactersAdapter
 import com.example.android_intern.databinding.CharacterFragmentBinding
@@ -18,14 +19,12 @@ import com.example.android_intern.viewModel.PREFIX
 class CharactersFragment : Fragment() {
     private var _binding: CharacterFragmentBinding? = null
     private val binding get() = _binding!!
-    private val adapter = CharactersAdapter { character ->
-        EpisodesViewModel.episode = character.episode?.map {
-            it?.removePrefix(PREFIX)
-        }?.joinToString() ?: ""
-        Log.e("Episode", character.id.toString())
-        Log.e("Episode", EpisodesViewModel.episode)
-        (context as MainActivity).setFragment(EpisodesFragment())
-    }
+    private val adapter = CharactersAdapter(
+        { character ->
+            EpisodesViewModel.episode = character.episode.map { it.removePrefix(PREFIX) }
+            (context as MainActivity).setFragment(EpisodesFragment())
+        },
+        { viewModel.nextPage() })
     private val viewModel by viewModels<CharactersViewModel>()
 
     override fun onCreateView(
@@ -41,17 +40,13 @@ class CharactersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initCharacterRecyclerView()
         observeLiveData()
-        binding.btnNext.setOnClickListener {
-            viewModel.nextPage()
-        }
     }
 
     private fun observeLiveData() {
         viewModel.liveData.observe(viewLifecycleOwner) { characters ->
-            adapter.submitList(characters.results)
+            adapter.submitList(characters)
         }
     }
-
 
     private fun initCharacterRecyclerView() {
         binding.characterRecyclerView.layoutManager = LinearLayoutManager(binding.root.context)

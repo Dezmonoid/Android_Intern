@@ -12,7 +12,7 @@ const val PREFIX = "https://rickandmortyapi.com/api/episode/"
 
 class EpisodesViewModel : ViewModel() {
     companion object {
-        var episode: String = ""
+        var episode: List<String> = listOf()
     }
 
     private val _liveData = MutableLiveData<List<Episode>>()
@@ -25,10 +25,13 @@ class EpisodesViewModel : ViewModel() {
 
     private fun getCallEpisodes() {
         viewModelScope.launch {
-            val characterList = App.apiService.getEpisode(episode)
-            _liveData.value = characterList
+            if (episode.size == 1) {
+                val characterList = App.apiService.getOneEpisode(episode.joinToString())
+                _liveData.value = listOf(characterList)
+            } else {
+                val characterList = App.apiService.getEpisode(episode.joinToString())
+                _liveData.value = characterList
+            }
         }
     }
-
-
 }
