@@ -1,6 +1,5 @@
 package com.example.android_intern.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -14,7 +13,6 @@ import com.example.android_intern.databinding.CharacterItemBinding
 
 const val ITEM_TYPE_CONTENT = 0
 const val ITEM_TYPE_BUTTON = 1
-const val ERROR_TAG = "Error"
 
 class CharactersAdapter(
     private val onItemClick: (characters: CharacterInterface.Character) -> Unit,
