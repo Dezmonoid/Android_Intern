@@ -13,9 +13,9 @@ private const val UNITS = "metric"
 private const val CITY_ID = "622034"
 
 class ForecastViewModel : ViewModel() {
-    private val _liveData = MutableLiveData<List<ForecastResponse.Sky>>()
+    private val _liveData = MutableLiveData<List<ForecastDataClass>>()
     private val forecastDao = db.forecastDao()
-    val liveData: LiveData<List<ForecastResponse.Sky>>
+    val liveData: LiveData<List<ForecastDataClass>>
         get() = _liveData
 
     init {
@@ -25,24 +25,30 @@ class ForecastViewModel : ViewModel() {
     private fun loadWeather() {
         viewModelScope.launch {
             try {
-                val forecasts = App.weatherApi.getCurrentForecastData(
+                val response = App.weatherApi.getCurrentForecastData(
                     cityId = CITY_ID,
                     appId = APP_ID,
                     units = UNITS
                 )
-                _liveData.value = forecasts.list.orEmpty()
-                forecastDao.insertForecast(
-                    liveData.value?.first()?.dtTxt.toString(),
-                    liveData.value?.first()?.main?.temp!!,
-                    liveData.value?.first()?.weather?.first()?.icon.toString()
-                )
+                _liveData.value = response.list?.map { it.toForecastDao() }
+                forecastDao.deleteAll()
+                liveData.value?.map {
+                    forecastDao.insertForecast(
+                        it.dtTxt.toString(),
+                        it.temp ?: 0.0, it.icon.toString()
+                    )
+                }
             } catch (e: Exception) {
-                Log.e("Test", forecastDao.getAll().toString())
+                _liveData.value = forecastDao.getAll()
             }
         }
     }
 
-    private fun convertToDataClass(response:ForecastResponse.Sky,dataClass:ForecastDataClass){
-    }
-
+    private fun ForecastResponse.Sky.toForecastDao(): ForecastDataClass =
+        ForecastDataClass(
+            id = null,
+            dtTxt = this.dtTxt,
+            temp = this.main?.temp,
+            icon = this.weather?.first()?.icon
+        )
 }

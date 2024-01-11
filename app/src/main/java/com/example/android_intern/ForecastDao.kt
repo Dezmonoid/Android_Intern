@@ -12,6 +12,9 @@ interface ForecastDao {
     @Query("SELECT * FROM forecastdataclass")
     suspend fun getAll(): List<ForecastDataClass>
 
+    @Query("DELETE FROM forecastdataclass")
+    suspend fun deleteAll()
+
     @Query("SELECT * FROM forecastdataclass WHERE id IN (:id)")
     suspend fun getById(id: IntArray): ForecastDataClass
 

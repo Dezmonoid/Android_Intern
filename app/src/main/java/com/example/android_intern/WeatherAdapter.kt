@@ -13,10 +13,10 @@ import com.example.android_intern.databinding.WeatherItemHotBinding
 private const val TYPE_COLD = 1
 private const val TYPE_HOT = 2
 private const val DEFAULT_TEMPERATURE = 0.0
-private const val THRESHOLD_TEMPERATURE = 20
+private const val THRESHOLD_TEMPERATURE = -5
 
 class WeatherAdapter() :
-    ListAdapter<ForecastResponse.Sky, RecyclerView.ViewHolder>(UserItemDiffCallback()) {
+    ListAdapter<ForecastDataClass, RecyclerView.ViewHolder>(UserItemDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_COLD -> {
@@ -56,7 +56,7 @@ class WeatherAdapter() :
     }
 
     override fun getItemViewType(position: Int): Int {
-        val temp = getItem(position).main?.temp ?: DEFAULT_TEMPERATURE
+        val temp = getItem(position).temp ?: DEFAULT_TEMPERATURE
         return if (temp < THRESHOLD_TEMPERATURE) {
             TYPE_COLD
         } else {
@@ -68,7 +68,7 @@ class WeatherAdapter() :
 class WeatherColdViewHolder(private val binding: WeatherItemColdBinding) :
     RecyclerView.ViewHolder(binding.root) {
     private val context = binding.root.context
-    fun bind(forecast: ForecastResponse.Sky) {
+    fun bind(forecast: ForecastDataClass) {
         binding.tvDateTime.text = context.getString(
             R.string.date,
             forecast.dtTxt
@@ -76,7 +76,7 @@ class WeatherColdViewHolder(private val binding: WeatherItemColdBinding) :
         binding.tvTemperature.text = context.getString(
             R.string.temperature,
             DecimalFormat(context.getString(R.string.format)).format(
-                forecast.main?.temp
+                forecast.temp
             )
         )
         Glide
@@ -84,7 +84,7 @@ class WeatherColdViewHolder(private val binding: WeatherItemColdBinding) :
             .load(
                 context.getString(
                     R.string.icon_url,
-                    forecast.weather?.first()?.icon
+                    forecast.icon
                 )
             )
             .into(binding.ivIcon)
@@ -95,7 +95,7 @@ class WeatherColdViewHolder(private val binding: WeatherItemColdBinding) :
 class WeatherHotViewHolder(private val binding: WeatherItemHotBinding) :
     RecyclerView.ViewHolder(binding.root) {
     private val context = binding.root.context
-    fun bind(forecast: ForecastResponse.Sky) {
+    fun bind(forecast: ForecastDataClass) {
         binding.tvDateTime.text = context.getString(
             R.string.date,
             forecast.dtTxt
@@ -103,23 +103,23 @@ class WeatherHotViewHolder(private val binding: WeatherItemHotBinding) :
         binding.tvTemperature.text = context.getString(
             R.string.temperature,
             DecimalFormat(context.getString(R.string.format)).format(
-                forecast.main?.temp
+                forecast.temp
             )
         )
     }
 }
 
-class UserItemDiffCallback : DiffUtil.ItemCallback<ForecastResponse.Sky>() {
+class UserItemDiffCallback : DiffUtil.ItemCallback<ForecastDataClass>() {
     override fun areItemsTheSame(
-        oldItem: ForecastResponse.Sky,
-        newItem: ForecastResponse.Sky
+        oldItem: ForecastDataClass,
+        newItem: ForecastDataClass
     ): Boolean {
-        return oldItem.dt == newItem.dt
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(
-        oldItem: ForecastResponse.Sky,
-        newItem: ForecastResponse.Sky
+        oldItem: ForecastDataClass,
+        newItem: ForecastDataClass
     ): Boolean {
         return oldItem == newItem
     }
