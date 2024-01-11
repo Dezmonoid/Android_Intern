@@ -114,7 +114,7 @@ class UserItemDiffCallback : DiffUtil.ItemCallback<ForecastDataClass>() {
         oldItem: ForecastDataClass,
         newItem: ForecastDataClass
     ): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.dtTxt == newItem.dtTxt
     }
 
     override fun areContentsTheSame(
