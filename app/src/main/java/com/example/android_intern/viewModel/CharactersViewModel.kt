@@ -66,5 +66,4 @@ private fun Characters.Result?.toCharacter(): CharacterInterface.Character =
         image = this?.image,
         episode = this?.episode as List<String>,
         id = this.id
-
     )
