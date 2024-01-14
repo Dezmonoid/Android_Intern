@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Android_Intern</string>
+    <string name="name_character">Rick and Morty</string>
+    <string name="name_episode">Episode</string>
+    <string name="button_prev">Prev</string>
+    <string name="button_next">Next</string>
+    <string name="connected">Подключение успешно</string>
+    <string name="error_connected">Ошибка подключения</string>
+    <string name="btn_name">Next</string>
+    <string name="error_type">Ошибка, неизвестный тип</string>
+    <string name="unknown_error">Ошибка? Как ты сюда попал?</string>
 </resources>
