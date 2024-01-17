@@ -1,13 +1,13 @@
-package com.example.android_intern
+package com.example.android_intern.data.model.db
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
-data class ForecastDataClass(
+@Entity(tableName = "forecast")
+data class ForecastDB(
     @PrimaryKey(true)
-    val id:Int?,
+    val id: Int? = null,
     @ColumnInfo(name = "dt")
     val dtTxt: String?,
     @ColumnInfo(name = "tmp")

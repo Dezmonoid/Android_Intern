@@ -1,9 +1,8 @@
-package com.example.android_intern
-
+package com.example.android_intern.data.model.nw
 
 import com.google.gson.annotations.SerializedName
 
-data class ForecastResponse(
+data class ForecastNW(
     @SerializedName("city")
     val city: City?,
     @SerializedName("cnt")

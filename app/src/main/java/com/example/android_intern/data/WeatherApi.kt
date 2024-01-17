@@ -1,5 +1,6 @@
-package com.example.android_intern
+package com.example.android_intern.data
 
+import com.example.android_intern.data.model.nw.ForecastNW
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -23,5 +24,5 @@ interface WeatherApi {
         @Query("id") cityId: String,
         @Query("APPID") appId: String,
         @Query("units") units: String
-    ): ForecastResponse
+    ): ForecastNW
 }
