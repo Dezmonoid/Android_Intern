@@ -8,9 +8,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.android_intern.domain.ForecastRepository
 import com.example.android_intern.presentation.model.ForecastUI
-import com.example.android_intern.presentation.toForecastUI
+import com.example.android_intern.presentation.toUI
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+const val TAG = "ForecastViewModel"
 
 class ForecastViewModel(
     private val repository: ForecastRepository
@@ -24,13 +27,20 @@ class ForecastViewModel(
     }
 
     private fun loadWeather() {
-        viewModelScope.launch(Dispatchers.Main) {
-            _liveData.value = repository.getForecast().map { it.toForecastUI() }
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val forecast = repository.getForecast().map { it.toUI() }
+                withContext(Dispatchers.Main) {
+                    _liveData.value = forecast
+                }
+            } catch (e: Throwable) {
+                Log.e(TAG, e.message, e)
+            }
         }
     }
 }
 
-class ForecastFactory(
+class ForecastViewModelFactory(
     private val repository: ForecastRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

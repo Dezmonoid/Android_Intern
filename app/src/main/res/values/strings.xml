@@ -5,7 +5,6 @@
     <string name="date">%1$s</string>
     <string name="temperature">%1$s С</string>
     <string name="pressure">%1$s мм рт. ст.</string>
-    <string name="format">#.##</string>
     <string name="icon_url">https://openweathermap.org/img/wn/%1$s@2x.png</string>
     <string name="town_name">Shklov</string>
     <string name="error_type">Ошибка, неизвестный тип</string>

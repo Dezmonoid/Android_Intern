@@ -7,20 +7,22 @@ import com.example.android_intern.domain.model.Forecast
 fun ForecastNW.Sky.toDomain(): Forecast =
     Forecast(
         dtTxt = this.dtTxt.toString(),
-        temp = this.main?.temp ?: 0.0,
+        temp = this.main?.temp.toZeroIfNull(),
         icon = this.weather?.first()?.icon.toString()
     )
 
 fun ForecastDB.toDomain(): Forecast =
     Forecast(
         dtTxt = this.dtTxt.toString(),
-        temp = this.temp ?: 0.0,
+        temp = this.temp.toZeroIfNull(),
         icon = this.icon.toString()
     )
 
-fun Forecast.toForecastDB(): ForecastDB =
+fun Forecast.toDB(): ForecastDB =
     ForecastDB(
         dtTxt = this.dtTxt,
         temp = this.temp,
         icon = this.icon
     )
+
+private fun Double?.toZeroIfNull(): Double = this ?: 0.0

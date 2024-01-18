@@ -1,6 +1,5 @@
 package com.example.android_intern.presentation.forecast
 
-import android.icu.text.DecimalFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -14,7 +13,6 @@ import com.example.android_intern.presentation.model.ForecastUI
 
 private const val TYPE_COLD = 1
 private const val TYPE_HOT = 2
-private const val DEFAULT_TEMPERATURE = 0.0
 private const val THRESHOLD_TEMPERATURE = -5
 
 class ForecastAdapter() :
@@ -58,7 +56,7 @@ class ForecastAdapter() :
     }
 
     override fun getItemViewType(position: Int): Int {
-        val temp = getItem(position).temp ?: DEFAULT_TEMPERATURE
+        val temp = getItem(position).temp
         return if (temp < THRESHOLD_TEMPERATURE) {
             TYPE_COLD
         } else {
@@ -72,14 +70,10 @@ class WeatherColdViewHolder(private val binding: WeatherItemColdBinding) :
     private val context = binding.root.context
     fun bind(forecast: ForecastUI) {
         binding.tvDateTime.text = context.getString(
-            R.string.date,
-            forecast.dtTxt
+            R.string.date, forecast.dtTxt
         )
         binding.tvTemperature.text = context.getString(
-            R.string.temperature,
-            DecimalFormat(context.getString(R.string.format)).format(
-                forecast.temp
-            )
+            R.string.temperature, forecast.temp.toString()
         )
         Glide
             .with(itemView)
@@ -103,10 +97,7 @@ class WeatherHotViewHolder(private val binding: WeatherItemHotBinding) :
             forecast.dtTxt
         )
         binding.tvTemperature.text = context.getString(
-            R.string.temperature,
-            DecimalFormat(context.getString(R.string.format)).format(
-                forecast.temp
-            )
+            R.string.temperature, forecast.temp.toString()
         )
     }
 }

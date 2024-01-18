@@ -14,21 +14,18 @@ class ForecastRepositoryImpl(
     private val weatherApi: WeatherApi
 ) : ForecastRepository {
     override suspend fun getForecast(): List<Forecast> {
-        var forecast: List<Forecast>
-        return withContext(Dispatchers.IO) {
             val forecastDao = appDatabase.forecastDao()
-            try {
+            return try {
                 val response = weatherApi.getCurrentForecastData(
                     cityId = CITY_ID,
                     appId = APP_ID,
                     units = UNITS
                 )
-                forecast = response.list?.map { it.toDomain() } ?: emptyList()
-                forecastDao.insertToDatabase(forecast.map { it.toForecastDB() })
+                val forecast = response.list?.map { it.toDomain() }.orEmpty()
+                forecastDao.insertToDatabase(forecast.map { it.toDB() })
                 forecast
             } catch (e: Exception) {
                 forecastDao.getAll().map { it.toDomain() }
             }
         }
-    }
 }
