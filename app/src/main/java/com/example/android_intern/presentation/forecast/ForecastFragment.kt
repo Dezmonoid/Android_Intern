@@ -8,7 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_intern.App
+import com.example.android_intern.data.ForecastRepositoryImpl
 import com.example.android_intern.databinding.WeatherFragmentBinding
+import com.example.android_intern.domain.ForecastRepository
+import javax.inject.Inject
 
 class ForecastFragment : Fragment() {
     private var _binding: WeatherFragmentBinding? = null

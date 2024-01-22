@@ -4,12 +4,14 @@ import com.example.android_intern.domain.ForecastRepository
 import com.example.android_intern.domain.model.Forecast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
 private const val APP_ID = "eeba719e0ea1ed0d70d6ea433307695e"
 private const val UNITS = "metric"
 private const val CITY_ID = "622034"
 
-class ForecastRepositoryImpl(
+class ForecastRepositoryImpl (
     private val appDatabase: AppDatabase,
     private val weatherApi: WeatherApi
 ) : ForecastRepository {
