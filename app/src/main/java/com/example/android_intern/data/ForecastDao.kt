@@ -19,7 +19,7 @@ abstract class ForecastDao() {
     abstract suspend fun insertAll(forecasts: List<ForecastDB>)
 
     @Transaction
-    open suspend fun insertToDatabase(forecasts: List<ForecastDB>){
+    open suspend fun insertToDatabase(forecasts: List<ForecastDB>) {
         deleteAll()
         insertAll(forecasts)
     }

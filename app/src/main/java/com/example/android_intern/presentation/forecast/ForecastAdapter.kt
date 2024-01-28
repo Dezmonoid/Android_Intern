@@ -15,7 +15,9 @@ private const val TYPE_COLD = 1
 private const val TYPE_HOT = 2
 private const val THRESHOLD_TEMPERATURE = -5
 
-class ForecastAdapter() :
+class ForecastAdapter(
+    private val onItemClick: (text: String) -> Unit
+) :
     ListAdapter<ForecastUI, RecyclerView.ViewHolder>(UserItemDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -46,11 +48,11 @@ class ForecastAdapter() :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
             TYPE_COLD -> {
-                (holder as WeatherColdViewHolder).bind(getItem(position))
+                (holder as WeatherColdViewHolder).bind(getItem(position), onItemClick)
             }
 
             TYPE_HOT -> {
-                (holder as WeatherHotViewHolder).bind(getItem(position))
+                (holder as WeatherHotViewHolder).bind(getItem(position), onItemClick)
             }
         }
     }
@@ -68,7 +70,7 @@ class ForecastAdapter() :
 class WeatherColdViewHolder(private val binding: WeatherItemColdBinding) :
     RecyclerView.ViewHolder(binding.root) {
     private val context = binding.root.context
-    fun bind(forecast: ForecastUI) {
+    fun bind(forecast: ForecastUI, onItemClick: (text: String) -> Unit) {
         binding.tvDateTime.text = context.getString(
             R.string.date, forecast.dtTxt
         )
@@ -84,6 +86,16 @@ class WeatherColdViewHolder(private val binding: WeatherItemColdBinding) :
                 )
             )
             .into(binding.ivIcon)
+        itemView.setOnLongClickListener {
+            onItemClick(
+                context.getString(
+                    R.string.share_message,
+                    forecast.dtTxt,
+                    forecast.temp.toString()
+                )
+            )
+            true
+        }
     }
 }
 
@@ -91,7 +103,7 @@ class WeatherColdViewHolder(private val binding: WeatherItemColdBinding) :
 class WeatherHotViewHolder(private val binding: WeatherItemHotBinding) :
     RecyclerView.ViewHolder(binding.root) {
     private val context = binding.root.context
-    fun bind(forecast: ForecastUI) {
+    fun bind(forecast: ForecastUI, onItemClick: (text: String) -> Unit) {
         binding.tvDateTime.text = context.getString(
             R.string.date,
             forecast.dtTxt
@@ -99,6 +111,16 @@ class WeatherHotViewHolder(private val binding: WeatherItemHotBinding) :
         binding.tvTemperature.text = context.getString(
             R.string.temperature, forecast.temp.toString()
         )
+        itemView.setOnLongClickListener {
+            onItemClick(
+                context.getString(
+                    R.string.share_message,
+                    forecast.dtTxt,
+                    forecast.temp.toString()
+                )
+            )
+            true
+        }
     }
 }
 

@@ -9,4 +9,6 @@
     <string name="town_name">Shklov</string>
     <string name="error_type">Ошибка, неизвестный тип</string>
     <string name="error_connect">Ошибка соединения</string>
+    <string name="app_data_base_name">forecast</string>
+    <string name="share_message">city: Shklow, \ndate: %1$s, \ntemperature: %2$s"</string>
 </resources>

@@ -6,23 +6,23 @@ import com.example.android_intern.domain.model.Forecast
 
 fun ForecastNW.Sky.toDomain(): Forecast =
     Forecast(
-        dtTxt = this.dtTxt.toString(),
-        temp = this.main?.temp.toZeroIfNull(),
-        icon = this.weather?.first()?.icon.toString()
+        dtTxt = dtTxt.toString(),
+        temp = main?.temp.toZeroIfNull(),
+        icon = weather?.first()?.icon.toString()
     )
 
 fun ForecastDB.toDomain(): Forecast =
     Forecast(
-        dtTxt = this.dtTxt.toString(),
-        temp = this.temp.toZeroIfNull(),
-        icon = this.icon.toString()
+        dtTxt = dtTxt.toString(),
+        temp = temp.toZeroIfNull(),
+        icon = icon.toString()
     )
 
 fun Forecast.toDB(): ForecastDB =
     ForecastDB(
-        dtTxt = this.dtTxt,
-        temp = this.temp,
-        icon = this.icon
+        dtTxt = dtTxt,
+        temp = temp,
+        icon = icon
     )
 
 private fun Double?.toZeroIfNull(): Double = this ?: 0.0

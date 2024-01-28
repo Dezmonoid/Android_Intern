@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.android_intern.R
 import com.example.android_intern.databinding.ActivityMainBinding
 import com.example.android_intern.presentation.forecast.ForecastFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {

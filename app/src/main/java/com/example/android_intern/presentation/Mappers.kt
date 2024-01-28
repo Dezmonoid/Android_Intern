@@ -7,6 +7,6 @@ import kotlin.math.round
 fun Forecast.toUI(): ForecastUI =
     ForecastUI(
         dtTxt = dtTxt,
-        temp = round(temp).toInt() ,
+        temp = round(temp).toInt(),
         icon = icon
     )

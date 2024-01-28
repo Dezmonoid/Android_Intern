@@ -1,5 +1,6 @@
 package com.example.android_intern.presentation.forecast
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,18 +8,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.android_intern.App
-import com.example.android_intern.data.ForecastRepositoryImpl
 import com.example.android_intern.databinding.WeatherFragmentBinding
-import com.example.android_intern.domain.ForecastRepository
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ForecastFragment : Fragment() {
     private var _binding: WeatherFragmentBinding? = null
+    private val viewModel by viewModels<ForecastViewModel>()
     private val binding get() = _binding!!
-    private val adapter = ForecastAdapter()
-    private val viewModel by viewModels<ForecastViewModel> {
-        ForecastViewModelFactory(App.repository)
+    private val adapter = ForecastAdapter { message: String ->
+        shareMessage(message)
     }
 
     override fun onCreateView(
@@ -33,12 +32,19 @@ class ForecastFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
-        observeViewModel()
+        observeLiveData()
+        observeEvent()
     }
 
-    private fun observeViewModel() {
+    private fun observeLiveData() {
         viewModel.liveData.observe(viewLifecycleOwner) { forecast ->
             adapter.submitList(forecast)
+        }
+    }
+
+    private fun observeEvent() {
+        viewModel.event.observe(viewLifecycleOwner) {
+            it.getContentEvent(requireView())
         }
     }
 
@@ -50,5 +56,15 @@ class ForecastFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun shareMessage(message: String) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, message)
+            type = "text/plain"
+        }
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
     }
 }
