@@ -23,13 +23,13 @@ class ForecastViewModel @Inject constructor(
 ) : ViewModel() {
     private val _liveData = MutableLiveData<List<ForecastUI>>()
     private val _event = MutableLiveData<Event<ForecastType>>()
-    private val _region = MutableLiveData<String>()
+    private val _location = MutableLiveData<String>()
     val liveData: LiveData<List<ForecastUI>>
         get() = _liveData
     val event: LiveData<Event<ForecastType>>
         get() = _event
-    val region: LiveData<String>
-        get() = _region
+    val location: LiveData<String>
+        get() = _location
 
     private fun loadWeather() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -37,7 +37,7 @@ class ForecastViewModel @Inject constructor(
                 val forecast = repository.getForecast()
                 withContext(Dispatchers.Main) {
                     _liveData.value = forecast.forecast.map { it.toUI() }
-                    _region.value = forecast.region
+                    _location.value = forecast.location
                     _event.value = Event(forecast.forecastType)
                 }
             } catch (e: Throwable) {
@@ -49,7 +49,7 @@ class ForecastViewModel @Inject constructor(
     fun getRegion() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                repository.getRegion()
+                repository.getLocation()
                 loadWeather()
             } catch (e: Throwable) {
                 Log.e(TAG, e.message, e)

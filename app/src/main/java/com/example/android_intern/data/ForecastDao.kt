@@ -8,7 +8,6 @@ import com.example.android_intern.data.model.db.ForecastDB
 
 @Dao
 abstract class ForecastDao() {
-
     @Query("SELECT * FROM forecast")
     abstract suspend fun getAll(): List<ForecastDB>
 

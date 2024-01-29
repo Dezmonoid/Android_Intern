@@ -63,8 +63,8 @@ class ForecastFragment : Fragment() {
         }
 
     private fun observeRegion() {
-        viewModel.region.observe(viewLifecycleOwner) {
-            binding.townText.text = it
+        viewModel.location.observe(viewLifecycleOwner) {locationName->
+            binding.townText.text = locationName
         }
     }
 
@@ -75,8 +75,8 @@ class ForecastFragment : Fragment() {
     }
 
     private fun observeEvent() {
-        viewModel.event.observe(viewLifecycleOwner) {
-            it.getContentEvent(requireView())
+        viewModel.event.observe(viewLifecycleOwner) {event->
+            event.getContentEvent(requireView())
         }
     }
 

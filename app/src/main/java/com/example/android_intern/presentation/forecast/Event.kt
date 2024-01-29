@@ -4,8 +4,9 @@ import android.view.View
 import com.example.android_intern.domain.model.ForecastType
 import com.google.android.material.snackbar.Snackbar
 
-open class Event<out T>(private val forecastType: T) {
+const val NOT_AVAILABLE = "Сервер сейчас не доступен"
 
+open class Event<out T>(private val forecastType: T) {
     var hasBeenHandled = false
         private set
 
@@ -13,7 +14,7 @@ open class Event<out T>(private val forecastType: T) {
         if (hasBeenHandled.not()) {
             when (forecastType) {
                 ForecastType.DataBase -> {
-                    Snackbar.make(view, "Сервер сейчас не доступен", Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, NOT_AVAILABLE, Snackbar.LENGTH_LONG)
                         .show()
                     hasBeenHandled = true
                 }

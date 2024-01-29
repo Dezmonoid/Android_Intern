@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "region")
-class RegionDB(
+class LocationDB(
     @PrimaryKey(true)
     val id: Int? = null,
     @ColumnInfo(name = "name")

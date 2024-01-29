@@ -1,18 +1,17 @@
 package com.example.android_intern.data
 
 import com.example.android_intern.data.model.nw.ForecastNW
-import com.example.android_intern.data.model.nw.RegionNW
+import com.example.android_intern.data.model.nw.LocationNW
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface WeatherApi {
-
     @GET("geo/1.0/reverse?")
-    suspend fun getCurrentRegionData(
+    suspend fun getCurrentLocationData(
         @Query("lat") lat: Double,
         @Query("lon") lon: Double,
         @Query("APPID") appId: String
-    ): List<RegionNW>
+    ): List<LocationNW>
 
     @GET("data/2.5/forecast?")
     suspend fun getCurrentForecastData(
