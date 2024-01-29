@@ -2,7 +2,8 @@ package com.example.android_intern.domain.model
 
 class ForecastModel(
     val forecast: List<Forecast>,
-    val forecastType: ForecastType
+    val forecastType: ForecastType,
+    val region:String
 )
 
 enum class ForecastType() {

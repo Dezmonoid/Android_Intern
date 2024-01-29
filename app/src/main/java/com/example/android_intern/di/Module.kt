@@ -6,8 +6,11 @@ import androidx.room.Room
 import com.example.android_intern.R
 import com.example.android_intern.data.AppDatabase
 import com.example.android_intern.data.ForecastRepositoryImpl
+import com.example.android_intern.data.RegionDatabase
 import com.example.android_intern.data.WeatherApi
 import com.example.android_intern.domain.ForecastRepository
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,7 +31,7 @@ object Module : Application() {
     @Singleton
     @Named("BaseUrl")
     fun providesBaseUrl(): String {
-        return "https://api.openweathermap.org/data/2.5/"
+        return "https://api.openweathermap.org/"
     }
 
     @Provides
@@ -63,11 +66,29 @@ object Module : Application() {
 
     @Provides
     @Singleton
+    fun providesRegionDatabase(@ApplicationContext context: Context): RegionDatabase =
+        Room
+            .databaseBuilder(
+                context = context,
+                klass = RegionDatabase::class.java,
+                name = R.string.region_data_base_name.toString()
+            )
+            .build()
+
+    @Provides
+    @Singleton
+    fun providesFusedLocation(@ApplicationContext context: Context): FusedLocationProviderClient =
+        LocationServices.getFusedLocationProviderClient(context)
+
+    @Provides
+    @Singleton
     fun providesRepository(
         appDatabase: AppDatabase,
+        regionDatabase: RegionDatabase,
         weatherApi: WeatherApi,
+        fusedLocationProviderClient: FusedLocationProviderClient
     ): ForecastRepository =
-        ForecastRepositoryImpl(appDatabase, weatherApi)
+        ForecastRepositoryImpl(appDatabase, regionDatabase, weatherApi, fusedLocationProviderClient)
 
     @Provides
     @Singleton

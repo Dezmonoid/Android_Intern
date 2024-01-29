@@ -89,7 +89,7 @@ class WeatherColdViewHolder(private val binding: WeatherItemColdBinding) :
         itemView.setOnLongClickListener {
             onItemClick(
                 context.getString(
-                    R.string.share_message,
+                    R.string.message,
                     forecast.dtTxt,
                     forecast.temp.toString()
                 )
@@ -114,7 +114,7 @@ class WeatherHotViewHolder(private val binding: WeatherItemHotBinding) :
         itemView.setOnLongClickListener {
             onItemClick(
                 context.getString(
-                    R.string.share_message,
+                    R.string.message,
                     forecast.dtTxt,
                     forecast.temp.toString()
                 )
