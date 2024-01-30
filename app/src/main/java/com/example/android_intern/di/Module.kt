@@ -6,7 +6,7 @@ import androidx.room.Room
 import com.example.android_intern.R
 import com.example.android_intern.data.AppDatabase
 import com.example.android_intern.data.ForecastRepositoryImpl
-import com.example.android_intern.data.LocationDatabase
+import com.example.android_intern.data.CityDatabase
 import com.example.android_intern.data.WeatherApi
 import com.example.android_intern.domain.ForecastRepository
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -66,11 +66,11 @@ object Module : Application() {
 
     @Provides
     @Singleton
-    fun providesRegionDatabase(@ApplicationContext context: Context): LocationDatabase =
+    fun providesRegionDatabase(@ApplicationContext context: Context): CityDatabase =
         Room
             .databaseBuilder(
                 context = context,
-                klass = LocationDatabase::class.java,
+                klass = CityDatabase::class.java,
                 name = R.string.region_data_base_name.toString()
             )
             .build()
@@ -84,13 +84,13 @@ object Module : Application() {
     @Singleton
     fun providesRepository(
         appDatabase: AppDatabase,
-        locationDatabase: LocationDatabase,
+        cityDatabase: CityDatabase,
         weatherApi: WeatherApi,
         fusedLocationProviderClient: FusedLocationProviderClient
     ): ForecastRepository =
         ForecastRepositoryImpl(
             appDatabase,
-            locationDatabase,
+            cityDatabase,
             weatherApi,
             fusedLocationProviderClient
         )

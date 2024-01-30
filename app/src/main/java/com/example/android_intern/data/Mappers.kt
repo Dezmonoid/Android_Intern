@@ -1,9 +1,9 @@
 package com.example.android_intern.data
 
 import com.example.android_intern.data.model.db.ForecastDB
-import com.example.android_intern.data.model.db.LocationDB
+import com.example.android_intern.data.model.db.CityDB
 import com.example.android_intern.data.model.nw.ForecastNW
-import com.example.android_intern.data.model.nw.LocationNW
+import com.example.android_intern.data.model.nw.CityNW
 import com.example.android_intern.domain.model.Forecast
 
 fun ForecastNW.Sky.toDomain(): Forecast =
@@ -27,8 +27,8 @@ fun Forecast.toDB(): ForecastDB =
         icon = icon
     )
 
-fun LocationNW.toDB(): LocationDB =
-    LocationDB(
+fun CityNW.toDB(): CityDB =
+    CityDB(
         name = this.localNames?.ru,
         lat = lat.toZeroIfNull(),
         lon = lon.toZeroIfNull()

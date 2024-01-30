@@ -1,24 +1,29 @@
 package com.example.android_intern.presentation.forecast
 
-import android.view.View
+import com.example.android_intern.domain.model.ForecastModel
 import com.example.android_intern.domain.model.ForecastType
-import com.google.android.material.snackbar.Snackbar
 
-const val NOT_AVAILABLE = "Сервер сейчас не доступен"
+open class Event<out T>(private val forecastModel: ForecastModel) {
 
-open class Event<out T>(private val forecastType: T) {
-    var hasBeenHandled = false
-        private set
+    private var hasBeenHandled = false
 
-    fun getContentEvent(view: View) {
-        if (hasBeenHandled.not()) {
-            when (forecastType) {
-                ForecastType.DataBase -> {
-                    Snackbar.make(view, NOT_AVAILABLE, Snackbar.LENGTH_LONG)
-                        .show()
-                    hasBeenHandled = true
+    fun getEventForecastType(): Boolean {
+        return when (hasBeenHandled) {
+            true -> false
+            false -> {
+                when (forecastModel.forecastType) {
+                    ForecastType.DataBase -> {
+                        hasBeenHandled = true
+                        true
+                    }
+
+                    ForecastType.Network -> false
                 }
             }
         }
+    }
+
+    fun getCityName(): String {
+        return forecastModel.city
     }
 }

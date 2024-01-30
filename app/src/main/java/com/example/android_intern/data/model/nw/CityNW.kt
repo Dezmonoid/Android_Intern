@@ -3,7 +3,7 @@ package com.example.android_intern.data.model.nw
 
 import com.google.gson.annotations.SerializedName
 
-data class LocationNW(
+data class CityNW(
     @SerializedName("country")
     val country: String?,
     @SerializedName("lat")

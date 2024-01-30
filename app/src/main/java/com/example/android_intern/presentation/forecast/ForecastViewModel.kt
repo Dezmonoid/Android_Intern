@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android_intern.domain.ForecastRepository
-import com.example.android_intern.domain.model.ForecastType
+import com.example.android_intern.domain.model.ForecastModel
 import com.example.android_intern.presentation.model.ForecastUI
 import com.example.android_intern.presentation.toUI
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,14 +22,11 @@ class ForecastViewModel @Inject constructor(
     private val repository: ForecastRepository
 ) : ViewModel() {
     private val _liveData = MutableLiveData<List<ForecastUI>>()
-    private val _event = MutableLiveData<Event<ForecastType>>()
-    private val _location = MutableLiveData<String>()
+    private val _event = MutableLiveData<Event<ForecastModel>>()
     val liveData: LiveData<List<ForecastUI>>
         get() = _liveData
-    val event: LiveData<Event<ForecastType>>
+    val event: LiveData<Event<ForecastModel>>
         get() = _event
-    val location: LiveData<String>
-        get() = _location
 
     private fun loadWeather() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -37,8 +34,7 @@ class ForecastViewModel @Inject constructor(
                 val forecast = repository.getForecast()
                 withContext(Dispatchers.Main) {
                     _liveData.value = forecast.forecast.map { it.toUI() }
-                    _location.value = forecast.location
-                    _event.value = Event(forecast.forecastType)
+                    _event.value = Event(forecast)
                 }
             } catch (e: Throwable) {
                 Log.e(TAG, e.message, e)

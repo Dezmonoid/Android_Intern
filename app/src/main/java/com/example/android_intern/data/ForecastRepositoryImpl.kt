@@ -17,12 +17,12 @@ private const val UNITS = "metric"
 
 class ForecastRepositoryImpl(
     private val appDatabase: AppDatabase,
-    private val locationDatabase: LocationDatabase,
+    private val cityDatabase: CityDatabase,
     private val weatherApi: WeatherApi,
     private val fusedLocationClient: FusedLocationProviderClient
 ) : ForecastRepository {
     private val forecastDao = appDatabase.forecastDao()
-    private val locationDao = locationDatabase.locationDao()
+    private val cityDao = cityDatabase.cityDao()
     override suspend fun getLocation() {
         val location = getCoordinates()
         val response = weatherApi.getCurrentLocationData(
@@ -30,22 +30,22 @@ class ForecastRepositoryImpl(
             lon = location?.longitude.toZeroIfNull(),
             appId = APP_ID
         )
-        locationDao.insertToLocationDatabase(response.first().toDB())
+        cityDao.insertToCityDatabase(response.first().toDB())
     }
 
     override suspend fun getForecast(): ForecastModel {
-        val location = locationDao.getLocation()
+        val city = cityDao.getCity()
         return try {
             val response = weatherApi.getCurrentForecastData(
-                lat = location.lat,
-                lon = location.lon,
+                lat = city.lat,
+                lon = city.lon,
                 appId = APP_ID,
                 units = UNITS
             )
             val forecast = ForecastModel(
                 forecast = response.list?.map { it.toDomain() }.orEmpty(),
                 forecastType = ForecastType.Network,
-                location = location.name.toString()
+                city = city.name.toString()
             )
             forecastDao.insertToDatabase(forecast.forecast.map { it.toDB() })
             forecast
@@ -53,7 +53,7 @@ class ForecastRepositoryImpl(
             ForecastModel(
                 forecast = forecastDao.getAll().map { it.toDomain() },
                 forecastType = ForecastType.DataBase,
-                location = location.name.toString()
+                city = city.name.toString()
             )
         }
     }

@@ -37,12 +37,18 @@ class ForecastFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
-        requestMultiplePermissions.launch(
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
+        if (savedInstanceState == null) {
+            requestMultiplePermissions.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
             )
-        )
+        }else{
+            observeLiveData()
+            observeEvent()
+        }
+
     }
 
     private fun requestPermission() =
@@ -50,7 +56,6 @@ class ForecastFragment : Fragment() {
             if (permissions.all { it.value }) {
                 viewModel.getRegion()
                 observeLiveData()
-                observeRegion()
                 observeEvent()
             } else {
                 Snackbar.make(
@@ -62,12 +67,6 @@ class ForecastFragment : Fragment() {
             }
         }
 
-    private fun observeRegion() {
-        viewModel.location.observe(viewLifecycleOwner) {locationName->
-            binding.townText.text = locationName
-        }
-    }
-
     private fun observeLiveData() {
         viewModel.liveData.observe(viewLifecycleOwner) { forecast ->
             adapter.submitList(forecast)
@@ -75,8 +74,16 @@ class ForecastFragment : Fragment() {
     }
 
     private fun observeEvent() {
-        viewModel.event.observe(viewLifecycleOwner) {event->
-            event.getContentEvent(requireView())
+        viewModel.event.observe(viewLifecycleOwner) { event ->
+            if (event.getEventForecastType()) {
+                Snackbar.make(
+                    requireView(),
+                    "Сервер сейчас не доступен",
+                    Snackbar.LENGTH_LONG
+                )
+                    .show()
+            }
+            binding.townText.text = event.getCityName()
         }
     }
 
