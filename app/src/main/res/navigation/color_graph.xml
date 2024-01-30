@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/color_navigation"
+    app:startDestination="@id/redFragment">
+
+    <fragment
+        android:id="@+id/redFragment"
+        android:name="com.example.android_intern.RedFragment"
+        android:label="RedFragment" />
+    <fragment
+        android:id="@+id/greenFragment"
+        android:name="com.example.android_intern.GreenFragment"
+        android:label="GreenFragment" />
+    <fragment
+        android:id="@+id/blueFragment"
+        android:name="com.example.android_intern.BlueFragment"
+        android:label="BlueFragment" />
+</navigation>
