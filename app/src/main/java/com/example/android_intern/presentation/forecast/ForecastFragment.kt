@@ -78,7 +78,7 @@ class ForecastFragment : Fragment() {
             if (event.getEventForecastType()) {
                 Snackbar.make(
                     requireView(),
-                    "Сервер сейчас не доступен",
+                    getString(R.string.server_not_availeble),
                     Snackbar.LENGTH_LONG
                 )
                     .show()

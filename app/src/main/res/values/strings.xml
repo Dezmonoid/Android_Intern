@@ -12,5 +12,6 @@
     <string name="region_data_base_name">region</string>
     <string name="message">, \ndate: %1$s, \ntemperature: %2$s"</string>
     <string name="share">city: %1$s"</string>
-    <string name="permission_denied">Права не предоставлены</string>
+    <string name="permission_denied">Не предоставлены права на получение геолокации пользователя</string>
+    <string name="server_not_availeble">Сервер сейчас не доступен</string>
 </resources>
